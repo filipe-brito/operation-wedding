@@ -1,0 +1,124 @@
+/* Carregamento da fonte JosefinSans */
+@font-face {
+  font-family: "JosefinSans";
+  font-style: normal;
+  /* Define o intervalo de pesos suportado pela Fonte Variável */
+  font-weight: 100 900;
+  font-display: swap;
+  /* Note: O nome da fonte agora é 'JosefinSans' */
+  src: url("/fonts/Josefin_Sans/JosefinSans-VariableFont_wght.ttf")
+    format("truetype");
+}
+
+/* Carregamento da fonte GreatVibes */
+@font-face {
+  font-family: "GreatVibes";
+  font-style: normal;
+  /* Define o intervalo de pesos suportado pela Fonte Variável */
+  font-weight: 100 900;
+  font-display: swap;
+  /* Note: O nome da fonte agora é 'GreatVibes' */
+  src: url("/fonts/Great_Vibes/GreatVibes-Regular.ttf") format("truetype");
+}
+
+/* Carregamento da fonte MarcellusSC */
+@font-face {
+  font-family: "MarcellusSC";
+  font-style: normal;
+  font-weight: 400; /* intervalo de pesos suportados */
+  font-display: swap; /* Importante para performance */
+  src: url("/fonts/Marcellus_SC/MarcellusSC-Regular.ttf") format("truetype");
+}
+
+/* Carregamento da fonte EmilysCandy */
+@font-face {
+  font-family: "EmilysCandy";
+  font-style: normal;
+  font-weight: 400; /* intervalo de pesos suportados */
+  font-display: swap; /* Importante para performance */
+  src: url("/fonts/Emilys_Candy/EmilysCandy-Regular.ttf") format("truetype");
+}
+
+/* ESTENDENDO O TEMA PARA INCLUIR A FONTE JOSEFIN */
+@theme {
+  /* Isso cria a classe Tailwind 'font-josefin' */
+  --font-josefin: "JosefinSans", system-ui, sans-serif;
+}
+
+/* ESTENDENDO O TEMA PARA INCLUIR A FONTE JOSEFIN */
+@theme {
+  /* Isso cria a classe Tailwind 'font-greatvibes' */
+  --font-greatvibes: "GreatVibes", system-ui, sans-serif;
+}
+
+/* ESTENDENDO O TEMA PARA INCLUIR A FONTE MARCELLUS */
+@theme {
+  /* Isso cria a classe Tailwind 'font-marcellus' */
+  --font-marcellus: "MarcellusSC", system-ui, sans-serif;
+}
+
+/* ESTENDENDO O TEMA PARA INCLUIR A FONTE EMILYS CANDY */
+@theme {
+  /* Isso cria a classe Tailwind 'font-emilyscandy' */
+  --font-emilyscandy: "EmilysCandy", system-ui, sans-serif;
+}
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+}
+
+@layer components {
+  /* Dropdown Animation (fade + slide) */
+  .dropdown-enter {
+    @apply opacity-0 translate-y-20;
+  }
+  .dropdown-enter-active {
+    @apply opacity-100 translate-y-0 transition-all duration-200 ease-out;
+  }
+  .dropdown-exit {
+    @apply opacity-100 translate-y-0;
+  }
+  .dropdown-exit-active {
+    @apply opacity-0 translate-y-20 transition-all duration-200 ease-in;
+  }
+}
+
+@import "tailwindcss";
