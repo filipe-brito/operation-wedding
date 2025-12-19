@@ -5,7 +5,7 @@ const MainLayout = () => {
   return (
     <div className="font-[JosefinSans] min-h-screen min-w-screen bg-[#FCFBF6]">
       <Header className="fixed w-full z-50" />
-      <main className="py-[8dvh]">
+      <main className="py-[8dvh] flex justify-center">
         <Outlet />
       </main>
     </div>

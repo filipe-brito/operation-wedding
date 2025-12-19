@@ -7,19 +7,19 @@ export const Header = () => {
       name: "homePage",
       value: <h2>Pagina Incial</h2>,
       optionStyle:
-        "cursor-pointer pl-4 py-2 rounded-t-md transition duration-300 hover:text-rose-500 hover:bg-blue-500/20",
+        "cursor-pointer pl-4 py-2 rounded-t-md transition duration-300 hover:bg-[#5a461a]/15",
     },
     {
       name: "messages",
       value: <h2>Mensagens</h2>,
       optionStyle:
-        "cursor-pointer pl-4 py-2 transition duration-300 hover:text-rose-500 hover:bg-blue-500/20",
+        "cursor-pointer pl-4 py-2 transition duration-300 hover:bg-[#5a461a]/15",
     },
     {
       name: "supplies",
       value: <h2>Fornecedores</h2>,
       optionStyle:
-        "cursor-pointer pl-4 py-2 transition duration-300 hover:text-rose-500 hover:bg-blue-500/20",
+        "cursor-pointer pl-4 py-2 transition duration-300 hover:bg-[#5a461a]/15",
     },
   ];
 
