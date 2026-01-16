@@ -6,6 +6,8 @@ import {
 } from "react-router-dom";
 import HomePage from "../pages/HomePage";
 import MessagesPage from "../pages/MessagesPage";
+import GiftsPage from "../pages/GiftsPage";
+import CheckoutPage from "../pages/CheckoutPage";
 import MainLayout from "../layouts/MainLayout";
 
 const AppRouter = () => {
@@ -22,6 +24,8 @@ const AppRouter = () => {
           <Route path="/home" element={<HomePage />} />
           {/* Outras rotas desse layout */}
           <Route path="/messages" element={<MessagesPage />} />
+          <Route path="/gifts" element={<GiftsPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
         </Route>
       </Routes>
     </Router>
