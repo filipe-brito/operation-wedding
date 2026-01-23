@@ -1,22 +1,25 @@
 import { useState, memo, useMemo, useCallback } from "react"; // Adicionado useState
 import { Payment, initMercadoPago } from "@mercadopago/sdk-react";
-import { useCart } from "../../context/CartContext"; // Importar seu hook
+import axios from "axios";
 
 initMercadoPago(import.meta.env.VITE_MERCADOPAGO_PUBLIC_KEY, {
   locale: "pt-BR",
 });
 
-const PaymentComponent = ({ amount, description, brickIsReady }) => {
-  const { clearCart } = useCart(); // Pegar a função de limpar
-  const [paymentResult, setPaymentResult] = useState(null); // Criar o estado
-
+const PaymentComponent = ({
+  amount,
+  description,
+  brickIsReady,
+  onPaymentSuccess,
+  onPaymentFailure,
+}) => {
   const [fixedAmount] = useState(amount);
 
   const initialization = useMemo(
     () => ({
       amount: fixedAmount, // Usamos o valor que foi "congelado" na montagem
     }),
-    [fixedAmount]
+    [fixedAmount],
   );
 
   const customization = useMemo(
@@ -25,9 +28,10 @@ const PaymentComponent = ({ amount, description, brickIsReady }) => {
         ticket: "all",
         bankTransfer: "all",
         creditCard: "all",
+        maxInstallments: 6,
       },
     }),
-    []
+    [],
   ); // Nunca muda
 
   const onSubmit = async ({ formData }) => {
@@ -38,30 +42,28 @@ const PaymentComponent = ({ amount, description, brickIsReady }) => {
     const idempotencyKey = crypto.randomUUID();
 
     return new Promise((resolve, reject) => {
-      fetch("http://localhost:8080/api/payment/process", {
+      axios({
+        url: "http://localhost:8080/api/payment/process",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-Idempotency-Key": idempotencyKey,
         },
-        body: JSON.stringify(dataForBackend),
+        data: dataForBackend,
       })
-        .then((response) => response.json()) // Converter a resposta para JSON
         .then((response) => {
-          setPaymentResult(response);
-          console.log("Payment Response: ", paymentResult);
-          clearCart(); // Limpar o carrinho após o pagamento
+          onPaymentSuccess(response.data);
           resolve();
         })
         .catch((error) => {
-          console.error(error);
+          onPaymentFailure(error.response?.data);
           reject();
         });
     });
   };
   const onError = async (error) => {
     // callback chamado para todos os casos de erro do Brick
-    console.log(error);
+    console.log("Não foi possível carregar o Brick: ", error);
   };
 
   const onReady = useCallback(() => {

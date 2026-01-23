@@ -14,7 +14,7 @@ const MainLayout = () => {
   return (
     <div className="font-[JosefinSans] min-h-screen min-w-screen bg-[#FCFBF6]">
       <Header className="fixed w-full z-50" />
-      <main className="py-[8dvh] flex justify-center">
+      <main className="flex justify-center">
         <Outlet />
         {/* O Carrinho e o Botão ficam "vigiando" o layout inteiro */}
         {!isCheckoutPage && (

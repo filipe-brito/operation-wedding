@@ -1,3 +1,57 @@
+export function CodeBarIcon(props) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="36"
+      height="36"
+      viewBox="0 0 36 36"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M5 7a1 1 0 0 0-1 1v22a1 1 0 0 0 2 0V8a1 1 0 0 0-1-1"
+        className="clr-i-outline clr-i-outline-path-1"
+      />
+      <path
+        fill="currentColor"
+        d="M9 7a1 1 0 0 0-1 1v18a1 1 0 0 0 2 0V8a1 1 0 0 0-1-1"
+        className="clr-i-outline clr-i-outline-path-2"
+      />
+      <path
+        fill="currentColor"
+        d="M13 7a1 1 0 0 0-1 1v18a1 1 0 0 0 2 0V8a1 1 0 0 0-1-1"
+        className="clr-i-outline clr-i-outline-path-3"
+      />
+      <path
+        fill="currentColor"
+        d="M17 7a1 1 0 0 0-1 1v18a1 1 0 0 0 2 0V8a1 1 0 0 0-1-1"
+        className="clr-i-outline clr-i-outline-path-4"
+      />
+      <path
+        fill="currentColor"
+        d="M21 7a1 1 0 0 0-1 1v18a1 1 0 0 0 2 0V8a1 1 0 0 0-1-1"
+        className="clr-i-outline clr-i-outline-path-5"
+      />
+      <path
+        fill="currentColor"
+        d="M25 7a1 1 0 0 0-1 1v18a1 1 0 0 0 2 0V8a1 1 0 0 0-1-1"
+        className="clr-i-outline clr-i-outline-path-6"
+      />
+      <path
+        fill="currentColor"
+        d="M29 7a1 1 0 0 0-1 1v18a1 1 0 0 0 2 0V8a1 1 0 0 0-1-1"
+        className="clr-i-outline clr-i-outline-path-7"
+      />
+      <path
+        fill="currentColor"
+        d="M33 7a1 1 0 0 0-1 1v22a1 1 0 0 0 2 0V8a1 1 0 0 0-1-1"
+        className="clr-i-outline clr-i-outline-path-8"
+      />
+      <path fill="none" d="M0 0h36v36H0z" />
+    </svg>
+  );
+}
+
 export function DownArrowIcon(props) {
   return (
     <svg
@@ -10,6 +64,23 @@ export function DownArrowIcon(props) {
       <path
         fill="currentColor"
         d="M8.2 275.4c0-8.6 3.4-17.401 10-24.001c13.2-13.2 34.8-13.2 48 0l451.8 451.8l445.2-445.2c13.2-13.2 34.8-13.2 48 0s13.2 34.8 0 48L542 775.399c-13.2 13.2-34.8 13.2-48 0l-475.8-475.8c-6.8-6.8-10-15.4-10-24.199"
+      />
+    </svg>
+  );
+}
+
+export function FailureIcon(props) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10s10-4.47 10-10S17.53 2 12 2m4.3 14.3a.996.996 0 0 1-1.41 0L12 13.41L9.11 16.3a.996.996 0 1 1-1.41-1.41L10.59 12L7.7 9.11A.996.996 0 1 1 9.11 7.7L12 10.59l2.89-2.89a.996.996 0 1 1 1.41 1.41L13.41 12l2.89 2.89c.38.38.38 1.02 0 1.41"
       />
     </svg>
   );
@@ -145,6 +216,42 @@ export function LeartLoadingIcon(props) {
           repeatCount="indefinite"
         />
       </path>
+    </svg>
+  );
+}
+
+export function ProcessingIcon(props) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M7 13.5q.625 0 1.063-.437T8.5 12t-.437-1.062T7 10.5t-1.062.438T5.5 12t.438 1.063T7 13.5m5 0q.625 0 1.063-.437T13.5 12t-.437-1.062T12 10.5t-1.062.438T10.5 12t.438 1.063T12 13.5m5 0q.625 0 1.063-.437T18.5 12t-.437-1.062T17 10.5t-1.062.438T15.5 12t.438 1.063T17 13.5M12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"
+      />
+    </svg>
+  );
+}
+
+export function SuccessIcon(props) {
+  return (
+    <svg
+      className="w-10 h-10 text-green-600"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="3"
+        d="M5 13l4 4L19 7"
+      />
     </svg>
   );
 }

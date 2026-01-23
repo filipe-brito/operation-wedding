@@ -1,5 +1,6 @@
 import { DropdownButton } from "../molecules/DropdownButton.jsx";
 import { DownArrowIcon } from "../atoms/Icons.jsx";
+import { Link } from "react-router-dom";
 
 export const Header = () => {
   const optionsPaginas = [
@@ -7,19 +8,22 @@ export const Header = () => {
       name: "homePage",
       value: <h2>Pagina Incial</h2>,
       optionStyle:
-        "cursor-pointer pl-4 py-2 rounded-t-md transition duration-300 hover:bg-[#5a461a]/15",
+        "cursor-pointer pl-4 py-2 rounded-t-md transition duration-300 hover:bg-[#5a461a]/15 text-[#5a461a]",
+      link: "/home",
     },
     {
       name: "messages",
       value: <h2>Mensagens</h2>,
       optionStyle:
         "cursor-pointer pl-4 py-2 transition duration-300 hover:bg-[#5a461a]/15",
+      link: "/messages",
     },
     {
       name: "supplies",
       value: <h2>Fornecedores</h2>,
       optionStyle:
         "cursor-pointer pl-4 py-2 transition duration-300 hover:bg-[#5a461a]/15",
+      link: "/supplies",
     },
   ];
 
@@ -45,9 +49,7 @@ export const Header = () => {
               />
             </li>
             <li className="flex">
-              <div>
-                <button>PRESENTES</button>
-              </div>
+              <Link to="/gifts">PRESENTES</Link>
             </li>
           </ul>
         </nav>

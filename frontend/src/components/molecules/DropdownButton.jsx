@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { Link } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 
 export const DropdownButton = ({
@@ -35,8 +36,10 @@ export const DropdownButton = ({
         <ul ref={dropdownRef} className={`absolute ${dropdownStyle}`}>
           {/** Essa prop deverá conter as opções em "li" já estilizadas.*/}
           {dropdownOptions.map((item) => (
-            <li key={item.name} className={item.optionStyle}>
-              {item.value}
+            <li key={item.name} className={`${item.optionStyle} block`}>
+              <Link to={item.link} className="text-inherit">
+                {item.value}
+              </Link>
             </li>
           ))}
         </ul>

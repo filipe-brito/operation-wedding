@@ -1,108 +1,100 @@
 import { useCart } from "../context/CartContext";
-import { useState, useEffect } from "react";
-import PaymentComponent from "../components/organisms/PaymentForm"; // Importe o componente que criamos antes
-import { LoadingIcon } from "../components/atoms/Icons";
+import { useState } from "react";
+import { ProcessPayment } from "../components/organisms/ProcessPayment";
+import { PaymentConclusion } from "../components/organisms/PaymentConclusion";
+import { FailureIcon } from "../components/atoms/Icons";
 
 const CheckoutPage = () => {
-  const { cart, totalValue } = useCart();
+  const { cart } = useCart();
 
-  // Se o convidado chegar aqui com o carrinho vazio, damos um aviso
   if (cart.length === 0) {
     return (
-      <div className="flex bg-[#FCFBF6]">
-        <h2 className="font-marcellus text-xl text-[#5a461a]">
+      <div className="flex my-10">
+        <h2 className="font-marcellus text-2xl text-[#5a461a]">
           Seu carrinho está vazio. Escolha um presente primeiro! 😉
         </h2>
       </div>
     );
   }
 
-  // Criamos a descrição que o Mercado Pago vai mostrar na fatura do cartão
-  const cartDescription = cart.map((item) => item.name).join(", ");
+  const handlePaymentSuccess = (paymentData) => {
+    setPaymentReturn(paymentData);
+    console.log("Teste: ", paymentData);
+    setPaymentStatus("success");
+  };
+
+  const handlePaymentFailure = (paymentData) => {
+    setPaymentReturn(paymentData);
+    console.log("Teste de erro: ", paymentData);
+    setPaymentStatus("failure");
+  };
 
   const [paymentStatus, setPaymentStatus] = useState("pending"); // "pending", "success", "failure" e loading
-  const [brickIsReady, setBrickIsReady] = useState(false);
-  useEffect(() => {
-    console.log("brickIsReady: ", brickIsReady);
-  }, [brickIsReady]);
+  const [paymentReturn, setPaymentReturn] = useState(null);
+
+  const activeStyle =
+    "whitespace-nowrap flex items-center justify-center w-54 p-2 text-stone-100 bg-[#575b43] border-none";
+  const inactiveStyle =
+    "whitespace-nowrap flex items-center justify-center w-54 p-2 text-[#5a461a] bg-transparent border border-[#575b43]";
 
   let paymentProcessPainel;
 
   switch (paymentStatus) {
     case "pending":
       paymentProcessPainel = (
-        <>
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
-            <h1 className="font-marcellus text-3xl text-[#5a461a] mb-8">
-              Resumo dos Presentes
-            </h1>
+        <ProcessPayment
+          handlePaymentSuccess={handlePaymentSuccess}
+          handlePaymentFailure={handlePaymentFailure}
+        />
+      );
+      break;
+    case "success":
+      paymentProcessPainel = <PaymentConclusion paymentData={paymentReturn} />;
+      break;
 
-            <div className="space-y-4">
-              {cart.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex justify-between items-center border-b border-stone-200 pb-2"
-                >
-                  <span className="font-josefin text-stone-700">
-                    {item.name}
-                  </span>
-                  <span className="font-josefin font-semibold">
-                    R$ {item.price.toFixed(2)}
-                  </span>
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-10 h-10 object-cover rounded-md ml-4"
-                  />
-                </div>
-              ))}
-            </div>
-
-            <div className="flex justify-between items-center pt-4">
-              <span className="font-marcellus text-xl">Total:</span>
-              <span className="font-josefin text-3xl font-bold text-[#5a461a]">
-                R$ {totalValue.toFixed(2)}
-              </span>
-            </div>
+    case "failure":
+      paymentProcessPainel = (
+        <div className="flex flex-col items-center bg-white p-10 rounded-2xl shadow-sm text-center">
+          <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mb-6">
+            <FailureIcon className="w-12 h-12 text-red-400" />
           </div>
-
-          {/* COLUNA DA DIREITA: O "Brick" do Mercado Pago */}
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
-            {!brickIsReady && (
-              <div className="w-full h-full flex items-center justify-center">
-                <LoadingIcon className="animate-spin h-16 w-16 text-[#5a461a]" />
-              </div>
-            )}
-            <div
-              className={`transition-opacity duration-500 ${
-                brickIsReady ? "opacity-100" : "opacity-0"
-              }`}
-            >
-              <h2 className="font-marcellus text-xl mb-6 text-center">
-                Pagamento Seguro
-              </h2>
-              <PaymentComponent
-                amount={totalValue}
-                description={`Lista de Casamento: ${cartDescription}`}
-                brickIsReady={setBrickIsReady}
-              />
-            </div>
-          </div>
-        </>
+          <h2 className="text-3xl mb-4">
+            Ocorreu um erro no processamento do pagamento.
+          </h2>
+          <p className="font-josefin text-stone-600 mb-6">
+            {paymentReturn.friendlyMessage}
+          </p>
+          <button
+            onClick={() => setPaymentStatus("pending")} // Volta para o Brick
+            className="px-8 py-2 bg-[#575b43] text-white rounded-lg hover:bg-[#454936] transition-colors cursor-pointer"
+          >
+            Tentar novamente com outro meio de pagamento
+          </button>
+        </div>
       );
       break;
   }
 
   return (
-    <div className="bg-[#FCFBF6] py-12 px-4">
-      <div className="flex w-full gap-4 items-center justify-center text-[#5a461a]">
-        <div>Processar presentes</div>
-        <div>Resumo do pagamento</div>
+    <div className="p-4">
+      <div className="flex w-full gap-4 items-center justify-center text-[#5a461a] mb-8">
+        <div
+          className={`${
+            paymentStatus === "pending" ? activeStyle : inactiveStyle
+          }`}
+        >
+          1. Processar presentes
+        </div>
+        <div
+          className={`${
+            paymentStatus === "success" ? activeStyle : inactiveStyle
+          }`}
+        >
+          2. Resumo do pagamento
+        </div>
       </div>
 
-      <div className="w-full mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-        {paymentProcessPainel}
-      </div>
+      <div>{paymentProcessPainel}</div>
     </div>
   );
 };
