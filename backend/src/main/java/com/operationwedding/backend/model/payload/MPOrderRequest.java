@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.operationwedding.backend.model.dto.PaymentDTO.Payer.Identification;
+import com.operationwedding.backend.model.dto.PaymentRequestDTO.Payer.Identification;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MPOrderRequest {

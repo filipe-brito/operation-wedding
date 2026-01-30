@@ -10,7 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
-import com.operationwedding.backend.model.dto.PaymentDTO;
+import com.operationwedding.backend.model.dto.PaymentRequestDTO;
+import com.operationwedding.backend.model.dto.PaymentResponseDTO;
 import com.operationwedding.backend.model.mapper.PaymentMapper;
 import com.operationwedding.backend.model.payload.MPOrderRequest;
 
@@ -28,34 +29,39 @@ public class MercadoPagoService {
 	
 	private RestTemplate restTemplate = new RestTemplate();
 	
-    public ResponseEntity<String> proccessMPPayment(PaymentDTO dto, String idempotencyKey) {
+    public ResponseEntity<PaymentResponseDTO> proccessMPPayment(PaymentRequestDTO dto, String idempotencyKey) {
         MPOrderRequest requestBody = PaymentMapper.toMPOrderRequest(dto);
-        System.out.println("Corpo que será enviado ao Mercado Pago: " + objectMapper.writeValueAsString(requestBody));
         
         HttpHeaders header = new HttpHeaders();
         header.setContentType(MediaType.APPLICATION_JSON);
         header.set("X-Idempotency-Key", idempotencyKey);
         header.setBearerAuth(mpToken);
-        System.out.println("Header que será enviado ao Mercado Pago: " + objectMapper.writeValueAsString(header));
-        
         HttpEntity<MPOrderRequest> httpEntity = new HttpEntity<>(requestBody, header);
         try {
         	ResponseEntity<String> response = restTemplate.postForEntity(paymentUrl, httpEntity, String.class);
-        	System.out.println("Transação processada!");
-        	System.out.println("=====================RETORNO DO MERCADO PAGO==================");
-        	System.out.println(response.getBody());
-        	return response;
+        	Object formatted = objectMapper.readValue(response.getBody(), Object.class);
+        	System.out.println("======RETORNO DO MERCADO PAGO======");
+        	System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(formatted));
+        	System.out.println("===================================");
+        	PaymentResponseDTO responseConverted = PaymentMapper.toPaymentResponse(
+        			objectMapper.readTree(response.getBody()));
+        	return ResponseEntity.status(response.getStatusCode()).body(responseConverted);
         } catch (HttpStatusCodeException e) {
-        	System.out.println("=====================EROO DO MERCADO PAGO=====================");
-            System.out.println("Erro Mercado Pago: " + e.getResponseBodyAsString());
-            System.out.println("Status Code do Erro: " + e.getStatusCode());
-            System.out.println("Headers do Erro: " + e.getResponseHeaders());
-            System.out.println("==============================================================");
-            return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString());
+        	String jsonError = e.getResponseBodyAsString();
+        	Object jsonObject = objectMapper.readValue(jsonError, Object.class);
+        	String jsonFormated = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonObject);
+        	System.out.println("=======ERRO DO MERCADO PAGO=======");
+        	System.out.println(e.getMessage() + "\n====================" + jsonFormated);
+        	System.out.println("===================================");
+            PaymentResponseDTO responseConverted = PaymentMapper.toPaymentResponse(
+            		objectMapper.readTree(e.getResponseBodyAsString()));
+            return ResponseEntity.status(e.getStatusCode()).body(responseConverted);
         }  
         catch (Exception e){
-        	System.out.println("Erro interno no pagamento: " + e.getMessage());
-        	return ResponseEntity.status(500).body(e.getMessage());
+        	PaymentResponseDTO responseError = new PaymentResponseDTO();
+        	responseError.setStatus("Erro interno ao processar pagamento!");
+        	responseError.setDetail("Não foi possível enviar o pagamento ao Mercado Pago.");
+        	return ResponseEntity.status(500).body(responseError);
         }
     }
 }

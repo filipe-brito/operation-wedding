@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class PaymentDTO {
+public class PaymentRequestDTO {
 	@JsonProperty("transaction_amount")
 	private BigDecimal transactionAmount;
 	@JsonProperty("payment_method_id")
