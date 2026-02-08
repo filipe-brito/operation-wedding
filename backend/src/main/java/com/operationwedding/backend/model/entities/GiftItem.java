@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "gifts_catalog")
+@Table(name = "gifts_catalog", schema="gifts")
 public class GiftItem {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

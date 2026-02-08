@@ -1,11 +1,27 @@
 package com.operationwedding.backend.model.dto;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class PaymentRequestDTO {
+	@JsonProperty("gift_items")
+	@NotNull(message="Selecione ao menos um item para o presente")
+	private List<GiftItemDTO> giftItems;
+	@JsonProperty("donor_name")
+	@NotNull(message="Informe o nome do presenteiro")
+	private String donorName;
+	@JsonProperty("donor_message")
+	@Size(max=500, message="A mensagem deve conter no máximo 500 caracteres")
+	private String donorMessage;
 	@JsonProperty("transaction_amount")
+	@NotNull(message="O valor do presente deve ser informado")
+	@DecimalMin(value="10.00", message="O valor do presente deve ser maior que R$10,00")
 	private BigDecimal transactionAmount;
 	@JsonProperty("payment_method_id")
 	private String paymentMethodId;
@@ -14,6 +30,30 @@ public class PaymentRequestDTO {
 	@JsonProperty("token")
 	private String cardToken;
 	private Integer installments;
+	
+	public List<GiftItemDTO> getGiftItems() {
+		return giftItems;
+	}
+
+	public void setGiftItems(List<GiftItemDTO> giftItems) {
+		this.giftItems = giftItems;
+	}
+
+	public String getDonorName() {
+		return donorName;
+	}
+
+	public void setDonorName(String donorName) {
+		this.donorName = donorName;
+	}
+
+	public String getDonorMessage() {
+		return donorMessage;
+	}
+
+	public void setDonorMessage(String donorMessage) {
+		this.donorMessage = donorMessage;
+	}
 
 	public BigDecimal getTransactionAmount() {
 		return transactionAmount;
@@ -61,6 +101,24 @@ public class PaymentRequestDTO {
 
 	public void setInstallments(Integer installments) {
 		this.installments = installments;
+	}
+
+	public static class GiftItemDTO {
+		private Long giftItemId;
+		private Integer quantity;
+		
+		public Long getGiftItemId() {
+			return giftItemId;
+		}
+		public void setGiftItemId(Long giftItemId) {
+			this.giftItemId = giftItemId;
+		}
+		public Integer getQuantity() {
+			return quantity;
+		}
+		public void setQuantity(Integer quantity) {
+			this.quantity = quantity;
+		}
 	}
 	
 	public static class Payer {

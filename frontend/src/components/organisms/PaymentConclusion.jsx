@@ -55,7 +55,7 @@ const PixPayment = ({ status, qrCodeBase64, qrCode }) => {
               <input
                 readOnly
                 value={qrCode}
-                className="w-full p-3 pr-24 bg-stone-50 border border-stone-200 rounded-lg text-xs font-mono truncate"
+                className="w-full p-3 pr-24 bg-stone-50 border border-stone-200 rounded-lg text-xs font-mono truncate text-stone-800"
               />
               <button
                 onClick={copiarPix}
