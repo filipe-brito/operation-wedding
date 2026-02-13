@@ -53,5 +53,4 @@ public class GiftItem {
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
 	}
-
 }

@@ -1,8 +1,10 @@
 import { useCart } from "../../context/CartContext";
 import { useNavigate } from "react-router-dom"; // Importe o navegador
+import { AddIcon, DeleteIcon, ReduceIcon } from "../atoms/Icons";
 
 const CartDrawer = ({ isOpen, onClose }) => {
-  const { cart, totalValue, removeFromCart, clearCart } = useCart();
+  const { cart, totalValue, removeFromCart, increaseQuantity, reduceQuantity } =
+    useCart();
 
   const navigate = useNavigate(); // Hook para navegação
   const handleCheckout = () => {
@@ -49,20 +51,40 @@ const CartDrawer = ({ isOpen, onClose }) => {
                   alt={item.name}
                   className="w-16 h-16 object-cover rounded"
                 />
-                <div className="flex-1">
-                  <h3 className="font-josefin text-[#5a461a] font-medium">
-                    {item.name}
-                  </h3>
-                  <p className="font-josefin text-stone-500">
-                    R$ {item.price.toFixed(2)}
-                  </p>
+                <div className="flex-col w-full">
+                  <div className="flex gap-4 w-full">
+                    <h3 className="font-josefin text-[#5a461a] font-medium">
+                      {item.name}
+                    </h3>
+                    <p className="font-josefin text-stone-500 ml-auto whitespace-nowrap">
+                      R$ {(item.price * item.quantity).toFixed(2)}
+                    </p>
+                  </div>
+
+                  <div className="flex">
+                    <div className="h-6 flex gap-4 p-2 text-[#5a461a] items-center justify-center border-1 rounded-md">
+                      <button
+                        className="cursor-pointer"
+                        onClick={() => reduceQuantity(item)}
+                      >
+                        <ReduceIcon />
+                      </button>
+                      <span>{item.quantity}</span>
+                      <button
+                        className="cursor-pointer"
+                        onClick={() => increaseQuantity(item)}
+                      >
+                        <AddIcon />
+                      </button>
+                    </div>
+                    <button
+                      onClick={() => removeFromCart(item)}
+                      className="ml-auto text-4xl text-[#5a461a]/70 hover:text-[#5a461a] w-6 h-6 border-2 rounded-md flex items-center justify-center cursor-pointer"
+                    >
+                      <DeleteIcon />
+                    </button>
+                  </div>
                 </div>
-                <button
-                  onClick={() => removeFromCart(item)}
-                  className="text-4xl text-[#5a461a]/70 hover:text-[#5a461a] w-6 h-6 border-2 rounded-md flex items-center justify-center cursor-pointer"
-                >
-                  -
-                </button>
               </div>
             ))
           )}

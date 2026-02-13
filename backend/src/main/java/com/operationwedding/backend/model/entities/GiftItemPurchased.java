@@ -30,7 +30,7 @@ public class GiftItemPurchased {
 	@NotNull(message="Selecione pelo menos um item do catálogo de presentes")
 	private GiftItem giftItem;
 	@Column(name="unit_price")
-	private BigDecimal unitPrice; // Should be defined by a service
+	private BigDecimal unitPrice; // Should be defined by a service or mapper
 	private Integer quantity;
 	@Column(name="total_amount")
 	private BigDecimal totalAmount;

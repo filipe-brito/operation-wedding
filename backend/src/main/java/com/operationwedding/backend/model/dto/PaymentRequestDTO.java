@@ -26,7 +26,6 @@ public class PaymentRequestDTO {
 	@JsonProperty("payment_method_id")
 	private String paymentMethodId;
 	private Payer payer;
-	private String description;
 	@JsonProperty("token")
 	private String cardToken;
 	private Integer installments;
@@ -79,13 +78,6 @@ public class PaymentRequestDTO {
 		this.payer = payer;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
 
 	public String getCardToken() {
 		return cardToken;
@@ -104,7 +96,9 @@ public class PaymentRequestDTO {
 	}
 
 	public static class GiftItemDTO {
+		@JsonProperty("id")
 		private Long giftItemId;
+		@JsonProperty("quantity")
 		private Integer quantity;
 		
 		public Long getGiftItemId() {

@@ -8,7 +8,7 @@ initMercadoPago(import.meta.env.VITE_MERCADOPAGO_PUBLIC_KEY, {
 
 const PaymentComponent = ({
   amount,
-  description,
+  items,
   brickIsReady,
   onPaymentSuccess,
   onPaymentFailure,
@@ -37,13 +37,14 @@ const PaymentComponent = ({
   const onSubmit = async ({ formData }) => {
     const dataForBackend = {
       ...formData,
-      description: description || "Presente de Casamento",
+      gift_items: items,
     };
     const idempotencyKey = crypto.randomUUID();
 
     return new Promise((resolve, reject) => {
+      console.log("Dados enviados ao backend: ", dataForBackend);
       axios({
-        url: "http://localhost:8080/api/payment/process",
+        url: "http://localhost:8080/api/gifts/process",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
