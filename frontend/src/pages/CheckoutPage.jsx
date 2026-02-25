@@ -3,6 +3,7 @@ import { useState } from "react";
 import { ProcessPayment } from "../components/organisms/ProcessPayment";
 import { PaymentConclusion } from "../components/organisms/PaymentConclusion";
 import { FailureIcon } from "../components/atoms/Icons";
+import { GiftReview } from "../components/organisms/GiftReview";
 
 const CheckoutPage = () => {
   const { cart } = useCart();
@@ -29,7 +30,7 @@ const CheckoutPage = () => {
     setPaymentStatus("failure");
   };
 
-  const [paymentStatus, setPaymentStatus] = useState("pending"); // "pending", "success", "failure" e loading
+  const [paymentStatus, setPaymentStatus] = useState("review"); // "pending", "success", "failure" e loading
   const [paymentReturn, setPaymentReturn] = useState(null);
 
   const activeStyle =
@@ -40,7 +41,11 @@ const CheckoutPage = () => {
   let paymentProcessPainel;
 
   switch (paymentStatus) {
-    case "pending":
+    case "review":
+      paymentProcessPainel = <GiftReview setPaymentStatus={setPaymentStatus} />;
+      break;
+
+    case "process":
       paymentProcessPainel = (
         <ProcessPayment
           handlePaymentSuccess={handlePaymentSuccess}
@@ -65,7 +70,7 @@ const CheckoutPage = () => {
             {paymentReturn.friendlyMessage}
           </p>
           <button
-            onClick={() => setPaymentStatus("pending")} // Volta para o Brick
+            onClick={() => setPaymentStatus("process")} // Volta para o Brick
             className="px-8 py-2 bg-[#575b43] text-white rounded-lg hover:bg-[#454936] transition-colors cursor-pointer"
           >
             Tentar novamente com outro meio de pagamento
@@ -80,17 +85,24 @@ const CheckoutPage = () => {
       <div className="flex w-full gap-4 items-center justify-center text-[#5a461a] mb-8">
         <div
           className={`${
-            paymentStatus === "pending" ? activeStyle : inactiveStyle
+            paymentStatus === "review" ? activeStyle : inactiveStyle
           }`}
         >
-          1. Processar presentes
+          1. Revisar presentes
+        </div>
+        <div
+          className={`${
+            paymentStatus === "process" ? activeStyle : inactiveStyle
+          }`}
+        >
+          2. Processar pagamento
         </div>
         <div
           className={`${
             paymentStatus === "success" ? activeStyle : inactiveStyle
           }`}
         >
-          2. Resumo do pagamento
+          3. Resumo do pagamento
         </div>
       </div>
 

@@ -8,6 +8,8 @@ export function CartProvider({ children }) {
   // List of products in the cart
   const [cart, setCart] = useState([]);
 
+  const [donorName, setDonorName] = useState("");
+  const [message, setMessage] = useState("");
   // Function to add a product to the cart
   const addToCart = (product) => {
     // Pegamos o que já tinha no carrinho (...prev) e adicionamos o novo
@@ -72,6 +74,10 @@ export function CartProvider({ children }) {
         reduceQuantity,
         clearCart,
         totalValue,
+        donorName,
+        setDonorName,
+        message,
+        setMessage,
       }}
     >
       {children}

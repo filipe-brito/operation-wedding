@@ -8,6 +8,8 @@ initMercadoPago(import.meta.env.VITE_MERCADOPAGO_PUBLIC_KEY, {
 
 const PaymentComponent = ({
   amount,
+  donorName,
+  message,
   items,
   brickIsReady,
   onPaymentSuccess,
@@ -36,6 +38,8 @@ const PaymentComponent = ({
 
   const onSubmit = async ({ formData }) => {
     const dataForBackend = {
+      donor_name: donorName,
+      donor_message: message,
       ...formData,
       gift_items: items,
     };
