@@ -1,9 +1,12 @@
 package com.operationwedding.backend.model.dto;
 
 import java.math.BigDecimal;
-
+/**
+ * DTO that represents the payment response to be returned to the frontend
+ */
 public class PaymentResponseDTO {
 	
+	private String externalReference;
 	private String status; // approved, rejected, pending
 	private String paymentMethodId;
 	private String paymentMethodType;
@@ -14,6 +17,14 @@ public class PaymentResponseDTO {
 	private String qrCode; // Se for PIX (texto do copia e cola)
 	private BigDecimal totalPaidAmount;
 
+	public String getExternalReference() {
+		return externalReference;
+	}
+
+	public void setExternalReference(String externalReference) {
+		this.externalReference = externalReference;
+	}
+	
 	public String getStatus() {
 		return status;
 	}

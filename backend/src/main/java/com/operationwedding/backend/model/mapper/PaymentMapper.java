@@ -79,6 +79,8 @@ public class PaymentMapper {
 		
 		JsonNode root = mpResponse.has("data") ? mpResponse.path("data") : mpResponse;
 		
+		String externalReference = root.path("external_reference").asString(null);
+		
 		String status = root.path("transactions").path("payments").get(0).path("status")
 				.asString(null);
 		String paymentMethodId = root.path("transactions").path("payments").get(0)
@@ -97,6 +99,7 @@ public class PaymentMapper {
 		BigDecimal totalPaidAmount = root.path("total_paid_amount").asDecimal(null);
 		
 		PaymentResponseDTO dto = new PaymentResponseDTO();
+		dto.setExternalReference(externalReference);
 		dto.setStatus(status);;
 		dto.setPaymentMethodId(paymentMethodId);
 		dto.setPaymentMethodType(paymentMethodType);

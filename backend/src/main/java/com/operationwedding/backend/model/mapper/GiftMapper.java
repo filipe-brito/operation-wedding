@@ -21,6 +21,7 @@ public class GiftMapper {
 	
 	public GiftReceived toEntity(PaymentRequestDTO dto, PaymentResponseDTO mpResponse) {
 		GiftReceived giftReceived = new GiftReceived();
+		giftReceived.setExternalReference(mpResponse.getExternalReference());
 		giftReceived.setDonorName(dto.getDonorName());
 		giftReceived.setDonorMessage(dto.getDonorMessage());
 		giftReceived.setGiftAmount(dto.getTransactionAmount());

@@ -9,6 +9,10 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+
+/**
+ * DTO that representing the payment request sent by the frontend
+ */
 public class PaymentRequestDTO {
 	@JsonProperty("gift_items")
 	@NotNull(message="Selecione ao menos um item para o presente")

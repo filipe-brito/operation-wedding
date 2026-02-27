@@ -21,7 +21,7 @@ public class GiftItemPurchased {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
-	@JoinColumn(name="gifts_received_id")
+	@JoinColumn(name="gift_received_id")
 	@ManyToOne(fetch=FetchType.LAZY)
 	@NotNull(message="O item deve estar vinculado a um presente pré-existente")
 	private GiftReceived giftReceived;

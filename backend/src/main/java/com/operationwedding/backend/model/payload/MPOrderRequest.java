@@ -1,18 +1,16 @@
 package com.operationwedding.backend.model.payload;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.operationwedding.backend.model.dto.PaymentRequestDTO.Payer.Identification;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MPOrderRequest {
 	private String type = "online";
 	@JsonProperty("external_reference")
-	private String externalReference = "TEST_" + UUID.randomUUID().toString().replace("-", "_"); // Será usado como referência no banco de dados futuramente
+	private String externalReference = "REF_" + UUID.randomUUID().toString().replace("-", "_"); // Será usado como referência no banco de dados futuramente
 	private Transactions transactions;
 	private Payer payer;
 	@JsonProperty("total_amount")
