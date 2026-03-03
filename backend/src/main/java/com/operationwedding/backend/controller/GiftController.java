@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.operationwedding.backend.model.dto.GiftItemDTO;
 import com.operationwedding.backend.model.dto.PaymentRequestDTO;
 import com.operationwedding.backend.model.dto.PaymentResponseDTO;
-import com.operationwedding.backend.model.payload.MPFetchPaymentResponse;
 import com.operationwedding.backend.services.GiftService;
-import com.operationwedding.backend.services.MercadoPagoService;
 
 import jakarta.validation.Valid;
 import tools.jackson.databind.JsonNode;
@@ -40,8 +38,6 @@ public class GiftController {
 		System.out.println("Corpo recebido do front: " + objectMapper.writeValueAsString(paymentDTO));
 
 		ResponseEntity<PaymentResponseDTO> response = giftService.processGift(paymentDTO, idempotencyKey);
-
-		System.out.println("Status da resposta do backend: \n" + response.getStatusCode().toString());
 
 		return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
 	}

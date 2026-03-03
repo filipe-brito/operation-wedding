@@ -1,6 +1,5 @@
 package com.operationwedding.backend.model.mapper;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,8 +14,7 @@ import com.operationwedding.backend.model.payload.MPOrderRequest.Payer;
 import com.operationwedding.backend.model.payload.MPOrderRequest.Transactions;
 import com.operationwedding.backend.model.payload.MPOrderRequest.Transactions.Payment;
 import com.operationwedding.backend.model.payload.MPOrderRequest.Transactions.Payment.PaymentMethod;
-
-import tools.jackson.databind.JsonNode;
+import com.operationwedding.backend.model.payload.MPProcessPaymentResponse;
 
 public class PaymentMapper {
 
@@ -75,41 +73,27 @@ public class PaymentMapper {
 		return request;
 	}
 
-	public static PaymentResponseDTO toPaymentResponse(JsonNode mpResponse) {
-		
-		JsonNode root = mpResponse.has("data") ? mpResponse.path("data") : mpResponse;
-		
-		String externalReference = root.path("external_reference").asString(null);
-		
-		String status = root.path("transactions").path("payments").get(0).path("status")
-				.asString(null);
-		String paymentMethodId = root.path("transactions").path("payments").get(0)
-				.path("payment_method").path("id").asString(null);
-		String paymentMethodType = root.path("transactions").path("payments").get(0)
-				.path("payment_method").path("type").asString(null);
-		String detail = root.path("transactions").path("payments").get(0)
-				.path("status_detail").asString(null);
-		String friendlyMessage = MESSAGES.getOrDefault(detail, MESSAGES.get("Ocorreu um erro inesperado."));
-		String paymentId = root.path("transactions").path("payments").get(0)
-				.path("id").asString(null);
-		String qrCodeBase64 = root.path("transactions").path("payments").get(0)
-				.path("payment_method").path("qr_code_base64").asString(null);
-		String qrCode = root.path("transactions").path("payments").get(0)
-				.path("payment_method").path("qr_code").asString(null);
-		BigDecimal totalPaidAmount = root.path("total_paid_amount").asDecimal(null);
+	public static PaymentResponseDTO toPaymentResponse(MPProcessPaymentResponse mpResponse) {
 		
 		PaymentResponseDTO dto = new PaymentResponseDTO();
-		dto.setExternalReference(externalReference);
-		dto.setStatus(status);;
-		dto.setPaymentMethodId(paymentMethodId);
-		dto.setPaymentMethodType(paymentMethodType);
-		dto.setDetail(detail);
-		dto.setFriendlyMessage(friendlyMessage);
-		dto.setPaymentId(paymentId);
-		dto.setQrCodeBase64(qrCodeBase64);
-		dto.setQrCode(qrCode);
-		dto.setTotalPaidAmount(totalPaidAmount);
-
+		dto.setExternalReference(mpResponse.getExternalReference());
+		if(
+			mpResponse.getTransactions() != null && 
+			mpResponse.getTransactions().getPayments() != null && 
+			!mpResponse.getTransactions().getPayments().isEmpty()
+			) {
+			dto.setStatus(mpResponse.getTransactions().getPayments().get(0).getStatus());
+			dto.setPaymentMethodId(mpResponse.getTransactions().getPayments().get(0).getPaymentMethod().getId());
+			dto.setPaymentMethodType(mpResponse.getTransactions().getPayments().get(0).getPaymentMethod().getType());
+			String detail = mpResponse.getTransactions().getPayments().get(0).getStatusDetail();
+			dto.setDetail(detail);
+			dto.setFriendlyMessage(MESSAGES.getOrDefault(detail, "Ocorreu um erro inesperado."));
+			dto.setPaymentId(mpResponse.getTransactions().getPayments().get(0).getId());
+			dto.setQrCodeBase64(mpResponse.getTransactions().getPayments().get(0).getPaymentMethod().getQrCodeBase64());
+			dto.setQrCode(mpResponse.getTransactions().getPayments().get(0).getPaymentMethod().getQrCode());
+			dto.setTotalPaidAmount(mpResponse.getTotalPaidAmount());
+		}
+		
 		return dto;
 	}
 }

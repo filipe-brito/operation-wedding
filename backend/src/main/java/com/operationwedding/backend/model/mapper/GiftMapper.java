@@ -5,13 +5,13 @@ import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.operationwedding.backend.model.dto.PaymentRequestDTO;
 import com.operationwedding.backend.model.dto.GiftItemDTO;
-import com.operationwedding.backend.model.dto.PaymentResponseDTO;
+import com.operationwedding.backend.model.dto.PaymentRequestDTO;
 import com.operationwedding.backend.model.entities.GiftItem;
 import com.operationwedding.backend.model.entities.GiftItemPurchased;
 import com.operationwedding.backend.model.entities.GiftReceived;
 import com.operationwedding.backend.model.enums.PaymentStatus;
+import com.operationwedding.backend.model.payload.MPProcessPaymentResponse;
 import com.operationwedding.backend.repositories.GiftsCatalogRepository;
 
 @Component
@@ -19,17 +19,21 @@ public class GiftMapper {
 	@Autowired
 	private GiftsCatalogRepository giftsCatalogRepository;
 	
-	public GiftReceived toEntity(PaymentRequestDTO dto, PaymentResponseDTO mpResponse) {
+	public GiftReceived toEntity(PaymentRequestDTO dto, MPProcessPaymentResponse mpResponse) {
 		GiftReceived giftReceived = new GiftReceived();
-		giftReceived.setExternalReference(mpResponse.getExternalReference());
 		giftReceived.setDonorName(dto.getDonorName());
 		giftReceived.setDonorMessage(dto.getDonorMessage());
+		giftReceived.setExternalReference(mpResponse.getExternalReference());
 		giftReceived.setGiftAmount(dto.getTransactionAmount());
-		giftReceived.setMpPaymentId(mpResponse.getPaymentId());
-		giftReceived.setStatus(PaymentStatus.fromMpValue(mpResponse.getStatus()));
+		if(mpResponse.getTransactions() != null
+				&& !mpResponse.getTransactions().getPayments().isEmpty()
+				&& mpResponse.getTransactions().getPayments() != null) {
+			giftReceived.setMpPaymentId(mpResponse.getTransactions().getPayments().get(0).getId());
+			giftReceived.setStatus(PaymentStatus.fromMpValue(mpResponse.getTransactions().getPayments().get(0).getStatus()));
+		}
+		
 		checkGiftItems(dto, giftReceived);
 		return giftReceived;
-		
 	}
 	
 	private void checkGiftItems(PaymentRequestDTO dto, GiftReceived giftReceived) {

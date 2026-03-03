@@ -4,10 +4,8 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MPFetchPaymentResponse {
 	private List<Payment> results;
 	
@@ -18,7 +16,6 @@ public class MPFetchPaymentResponse {
 		this.results = result;
 	}
 
-	@JsonInclude(JsonInclude.Include.NON_NULL)
 	public static class Payment {
 		private String status;
 		@JsonProperty("date_approved")
@@ -39,7 +36,6 @@ public class MPFetchPaymentResponse {
 			this.transactionDetails = transactionDetails;
 		}
 
-		@JsonInclude(JsonInclude.Include.NON_NULL)
 		public static class TransactionDetails {
 			@JsonProperty("net_received_amount")
 			private BigDecimal netReceivedAmount;

@@ -14,12 +14,12 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.mercadopago.net.HttpStatus;
-import com.operationwedding.backend.model.dto.PaymentRequestDTO;
-import com.operationwedding.backend.model.dto.PaymentResponseDTO;
-import com.operationwedding.backend.model.mapper.PaymentMapper;
+import com.operationwedding.backend.exception.MPPaymentException;
 import com.operationwedding.backend.model.payload.MPFetchPaymentResponse;
 import com.operationwedding.backend.model.payload.MPOrderRequest;
+import com.operationwedding.backend.model.payload.MPProcessPaymentResponse;
 
+import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
 @Service
@@ -37,41 +37,44 @@ public class MercadoPagoService {
 
 	private RestTemplate restTemplate = new RestTemplate();
 
-	public ResponseEntity<PaymentResponseDTO> proccessMPPayment(PaymentRequestDTO dto, String idempotencyKey) {
-		MPOrderRequest requestBody = PaymentMapper.toMPOrderRequest(dto);
+	public ResponseEntity<MPProcessPaymentResponse> proccessMPPayment(MPOrderRequest requestBody, String idempotencyKey) {
 
 		HttpHeaders header = new HttpHeaders();
 		header.setContentType(MediaType.APPLICATION_JSON);
 		header.set("X-Idempotency-Key", idempotencyKey);
 		header.setBearerAuth(mpToken);
 		HttpEntity<MPOrderRequest> httpEntity = new HttpEntity<>(requestBody, header);
+		
 		try {
-			// Isso deve ser ajustado. O ideal, é ter uma classe DTO para o retorno do
-			// Mercado Pago
-			ResponseEntity<String> response = restTemplate.postForEntity(paymentUrl, httpEntity, String.class);
-			Object formatted = objectMapper.readValue(response.getBody(), Object.class);
+			ResponseEntity<MPProcessPaymentResponse> response = restTemplate.postForEntity(paymentUrl, httpEntity, MPProcessPaymentResponse.class);
 			System.out.println("======RETORNO DO MERCADO PAGO======");
-			System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(formatted));
+			System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response));
 			System.out.println("===================================");
-			PaymentResponseDTO responseConverted = PaymentMapper
-					.toPaymentResponse(objectMapper.readTree(response.getBody()));
-			return ResponseEntity.status(response.getStatusCode()).body(responseConverted);
-		} catch (HttpStatusCodeException e) {
-			String jsonError = e.getResponseBodyAsString();
-			Object jsonObject = objectMapper.readValue(jsonError, Object.class);
-			String jsonFormated = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonObject);
-			System.out.println("=======ERRO DO MERCADO PAGO=======");
-			System.out.println(e.getMessage() + "\n====================" + jsonFormated);
-			System.out.println("===================================");
-			PaymentResponseDTO responseConverted = PaymentMapper
-					.toPaymentResponse(objectMapper.readTree(e.getResponseBodyAsString()));
-			return ResponseEntity.status(e.getStatusCode()).body(responseConverted);
-		} catch (Exception e) {
-			PaymentResponseDTO responseError = new PaymentResponseDTO();
-			responseError.setStatus("Erro interno ao processar pagamento!");
-			responseError.setDetail("Não foi possível enviar o pagamento ao Mercado Pago.");
-			return ResponseEntity.status(500).body(responseError);
+			
+			return response;
+		} catch (HttpStatusCodeException e){
+			if (e.getStatusCode().is4xxClientError()) {
+				String jsonError = e.getResponseBodyAsString();
+				// 1. Lê o JSON como uma árvore de nós
+	            JsonNode rootNode = objectMapper.readTree(jsonError);
+	            
+	            // 2. Tenta encontrar o nó "data". Se não existir, usa o rootNode (o próprio JSON)
+	            JsonNode targetNode = rootNode.has("data") ? rootNode.get("data") : rootNode;
+				MPProcessPaymentResponse jsonConverted = objectMapper.treeToValue(targetNode, MPProcessPaymentResponse.class);
+
+				System.out.println("======ERRO MERCADO PAGO======");
+				System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonConverted));
+				System.out.println("===================================");
+				
+				throw new MPPaymentException(e.getStatusCode(), jsonConverted);
+			} else {
+				System.out.println("======ERRO DIVERSO======");
+				System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(e.getResponseBodyAsString()));
+				System.out.println("===================================");
+				throw e;
+			}
 		}
+		
 	}
 
 	public ResponseEntity<MPFetchPaymentResponse> fetchMPPayment(String externalReference) {
@@ -89,10 +92,16 @@ public class MercadoPagoService {
 	}
 
 	public void MPPaymentValidation(String xSignature, String xRequestId, String dataId) {
-			String[] split = xSignature.split(",");
-			String ts = split[0].split("=")[1].trim();
-			String v1 = split[1].split("=")[1].trim();
-
+		String ts;
+		String v1;
+			try {
+				String[] split = xSignature.split(",");
+				ts = split[0].split("=")[1].trim();
+				v1 = split[1].split("=")[1].trim();
+			} catch (Exception e) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A assinatura do pagamento está com a estrutura inválida", null);
+			}
+			
 			long now = System.currentTimeMillis() / 1000;
 
 			if (Math.abs(now - Long.parseLong(ts)) > 300) {

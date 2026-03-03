@@ -1,9 +1,12 @@
 package com.operationwedding.backend.model.dto;
 
 import java.math.BigDecimal;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 /**
  * DTO that represents the payment response to be returned to the frontend
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PaymentResponseDTO {
 	
 	private String externalReference;
