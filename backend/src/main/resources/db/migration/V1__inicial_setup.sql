@@ -37,3 +37,21 @@ total_amount decimal(10, 2) not null,
 
 -- We must use Index to optimize the data searches. This way aviods the "sequencial reading" 
 create index idx_search_items_by_gifts_received_id on gifts.gifts_items_purchased(gift_received_id);
+
+create schema if not exists guests;
+
+create table guests.guest_list (
+	id serial primary key,
+	full_name varchar(255) not null,
+	phone varchar(11),
+	email varchar(255),
+	status varchar(20) not null default 'PENDING',
+		check (status in ('PENDING', 'CONFIRMED', 'WILL_NOT_ATTEND')),
+	is_companion boolean not null default false,
+	is_underage boolean not null default false,
+	guest_group varchar(100),
+	updated_at timestamp with time zone default null
+);
+
+CREATE INDEX idx_guest_group ON guests.guest_list(guest_group);
+CREATE INDEX idx_guest_status ON guests.guest_list(status);

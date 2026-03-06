@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.operationwedding.backend.model.dto.GiftItemDTO;
 import com.operationwedding.backend.model.dto.PaymentRequestDTO;
@@ -22,6 +21,7 @@ import com.operationwedding.backend.model.payload.MPProcessPaymentResponse;
 import com.operationwedding.backend.repositories.GiftsCatalogRepository;
 import com.operationwedding.backend.repositories.GiftsReceivedRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 @Service
 public class GiftService {
@@ -59,7 +59,7 @@ public class GiftService {
 	
 	private GiftReceived fetchGift(String externalReference) {
 	    return giftsReceivedRepository.findByExternalReference(externalReference)
-	        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Presente não encontrado na banco de dados"));
+	        .orElseThrow(() -> new EntityNotFoundException("Presente não encontrado na banco de dados"));
 	}
 	
 	@Transactional
