@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { GiftCard } from "../components/molecules/GiftCard";
 import { FetchGiftCatalog } from "../service/UtilsService";
+import { useLoading } from "@/context/LoadingContext"
 
 const GiftsPage = () => {
+const { setIsLoading } = useLoading();
+
   const [catalog, setCatalog] = useState([]);
 
   const handleFetchCatalog = async () => {
@@ -10,12 +13,14 @@ const GiftsPage = () => {
       const response = await FetchGiftCatalog();
       setCatalog(response);
       console.log("Catálogo de presentes: ", response);
+      setIsLoading(false);
     } catch (error) {
       console.error("Erro ao buscar catálogo de presentes!");
     }
   };
 
   useEffect(() => {
+    setIsLoading(true);
     handleFetchCatalog();
   }, []);
 

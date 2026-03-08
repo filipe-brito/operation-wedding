@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLoading } from "@/context/LoadingContext"
 
 // Defina a data e hora do casamento
 const TARGET_DATE = new Date("2026-10-18T16:00:00").getTime();
@@ -11,7 +12,13 @@ export const CountdownTimer = () => {
     seconds: 0,
   });
 
+  const {setIsLoading} = useLoading();
+
   useEffect(() => {
+    setIsLoading(true);
+
+    const turnOff = setTimeout(() => setIsLoading(false), 2000);
+
     const interval = setInterval(() => {
       const now = new Date().getTime();
       const distance = TARGET_DATE - now;
@@ -35,7 +42,7 @@ export const CountdownTimer = () => {
     }, 1000);
 
     // Limpeza: Garante que o intervalo seja removido quando o componente for desmontado
-    return () => clearInterval(interval);
+    return () => {clearTimeout(turnOff), clearInterval(interval);}
   }, []); //O array de dependências vazio garante que o efeito só rode na montagem
 
   return (

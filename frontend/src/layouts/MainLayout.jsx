@@ -4,6 +4,7 @@ import { useState } from "react";
 import CartFloatingButton from "../components/atoms/CartFloatingButton";
 import CartDrawer from "../components/organisms/CartDrawer";
 import { useLocation } from "react-router-dom";
+import LoadingModal from "../components/atoms/LoadingModal";
 
 const MainLayout = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -13,6 +14,7 @@ const MainLayout = () => {
 
   return (
     <div className="font-[JosefinSans] min-h-screen min-w-screen bg-[#FCFBF6]">
+      <LoadingModal />
       <Header className="fixed w-full z-50" />
       <main className="flex justify-center">
         <Outlet />

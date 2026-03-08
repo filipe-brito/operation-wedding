@@ -1,6 +1,10 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useLoading } from "@/context/LoadingContext"
 
 const MessagesPage = () => {
+  const { setIsLoading } = useLoading();
+
   const {
     register,
     handleSubmit,
@@ -10,6 +14,12 @@ const MessagesPage = () => {
   const onSubmit = (data) => {
     console.log("Dados da mensagem: ", data);
   };
+
+  useEffect(() => {
+    setIsLoading(true);
+    const turnOff = setTimeout(() => setIsLoading(false), 2000);
+    return () => clearTimeout(turnOff);
+  }, []);
 
   return (
     <div className="w-8/10 relative flex flex-col items-center px-5">

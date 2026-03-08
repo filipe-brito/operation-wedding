@@ -1,0 +1,60 @@
+    svg {
+        animation: fadeIn 1.5s ease-out forwards;
+    }
+    
+    path {
+            transform-origin: center;
+            transform-box: fill-box;
+        }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes pulsing {
+        0% {
+            transform: scale(1);   /* Começa no tamanho normal */
+            opacity: 0.6;            /* Totalmente visível */
+        }
+        100% {
+            transform: scale(10);   /* Expande 10x o tamanho (ocupa a box) */
+            opacity: 0;            /* Termina invisível (fade-out) */
+        }
+    }
+
+    @keyframes floating {
+        0% {
+            opacity: 0;
+            transform: translateY(0) rotate(-20deg);
+        }
+        25% {
+            opacity: 1;
+            transform: translateY(-40px) rotate(20deg); 
+        }
+        50% {
+            transform: translateY(-80px) rotate(-20deg); 
+        }
+        75% {
+            transform: translateY(-120px) rotate(20deg); 
+        }
+        100% {
+            opacity: 0;
+            transform: translateY(-160px) rotate(-20deg);
+        }
+    }
+
+    #pulsing_heart {
+        animation: pulsing 1.5s infinite ease-out;
+        }
+
+    #heart_1, #heart_2, #heart_3 {
+        animation: floating 3s infinite linear;
+    }
+    #heart_1 { animation-delay: 0s; }
+    #heart_2 { animation-delay: 1s; }
+    #heart_3 { animation-delay: 2s; }
