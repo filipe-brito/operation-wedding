@@ -9,6 +9,7 @@ import MessagesPage from "../pages/MessagesPage";
 import GiftsPage from "../pages/GiftsPage";
 import CheckoutPage from "../pages/CheckoutPage";
 import MainLayout from "../layouts/MainLayout";
+import RSVPPage from "../pages/RSVPPage";
 
 const AppRouter = () => {
   // AppRouter é uma arrow function
@@ -26,6 +27,7 @@ const AppRouter = () => {
           <Route path="/messages" element={<MessagesPage />} />
           <Route path="/gifts" element={<GiftsPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/rsvp" element={<RSVPPage />} />
         </Route>
       </Routes>
     </Router>

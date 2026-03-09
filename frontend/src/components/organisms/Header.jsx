@@ -51,6 +51,9 @@ export const Header = () => {
             <li className="flex">
               <Link to="/gifts">PRESENTES</Link>
             </li>
+            <li className="flex">
+              <Link to="/rsvp">CONFIRMAR PRESENÇA</Link>
+            </li>
           </ul>
         </nav>
       </div>

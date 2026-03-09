@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { GiftCard } from "../components/molecules/GiftCard";
 import { FetchGiftCatalog } from "../service/UtilsService";
-import { useLoading } from "@/context/LoadingContext"
+import { useLoading } from "@/context/LoadingContext";
 
 const GiftsPage = () => {
-const { setIsLoading } = useLoading();
+  const { setIsLoading } = useLoading();
 
   const [catalog, setCatalog] = useState([]);
 
