@@ -8,43 +8,43 @@ export const Header = () => {
       name: "homePage",
       value: <h2>Pagina Incial</h2>,
       optionStyle:
-        "cursor-pointer pl-4 py-2 rounded-t-md transition duration-300 hover:bg-[#5a461a]/15 text-[#5a461a]",
+        "cursor-pointer pl-4 py-2 rounded-t-md transition duration-300 hover:bg-[#7E8C54]/15",
       link: "/home",
     },
     {
       name: "messages",
       value: <h2>Mensagens</h2>,
       optionStyle:
-        "cursor-pointer pl-4 py-2 transition duration-300 hover:bg-[#5a461a]/15",
+        "cursor-pointer pl-4 py-2 transition duration-300 hover:bg-[#7E8C54]/15",
       link: "/messages",
     },
     {
       name: "supplies",
       value: <h2>Fornecedores</h2>,
       optionStyle:
-        "cursor-pointer pl-4 py-2 transition duration-300 hover:bg-[#5a461a]/15",
+        "cursor-pointer pl-4 py-2 transition duration-300 hover:bg-[#7E8C54]/15",
       link: "/supplies",
     },
   ];
 
   return (
-    <header className="h-[15dvh] top-0 w-full flex justify-center bg-[#FCFBF6] border-b border-[#5a461a]/30 z-50">
+    <header className="font-[Reboto] text-[#7E8C54] text-sm tracking-widest font-normal h-[15dvh] top-0 w-full flex justify-center bg-[#FCFBF6] border-b border-[#5a461a]/30 z-50">
       <div className="w-8/10 flex items-center">
-        <h1 className="flex items-center gap-4 font-[GreatVibes] text-2xl text-[#5a461a]">
+        <h1 className="flex items-center gap-4 font-[GreatVibes] text-2xl">
           <span className="text-5xl">A</span>
           <span>&</span>
           <span className="text-5xl">F</span>
         </h1>
-        <nav className="flex w-full px-10 h-full items-center justify-center">
-          <ul className="flex gap-8 font-regular text-[#5a461a]">
+        <nav className="flex w-full px-10 h-full items-center justify-end">
+          <ul className="flex gap-8 font-regular">
             <li className="flex">
               <DropdownButton
-                buttonStyle="flex items-center gap-1 font-regular cursor-pointer transition duration-300 text-[#5a461a]"
+                buttonStyle="flex items-center gap-1 font-regular cursor-pointer transition duration-300"
                 buttonLabel="PÁGINAS"
                 icon={<DownArrowIcon className="h-4 w-4" />}
                 dropdownOptions={optionsPaginas}
                 dropdownStyle={
-                  "w-50 bg-[#FCFBF6] shadow-lg rounded-md border-1 border-[#5a461a] divide-y-1 divide-[#5a461a]/10"
+                  "w-50 bg-[#FCFBF6] text-xs shadow-lg border-1 border-[#7E8C54] divide-y-1 divide-[#5a461a]/10"
                 }
               />
             </li>

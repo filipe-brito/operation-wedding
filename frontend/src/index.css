@@ -39,6 +39,28 @@
   src: url("/fonts/Emilys_Candy/EmilysCandy-Regular.ttf") format("truetype");
 }
 
+/* Carregamento da fonte Oswald */
+@font-face {
+  font-family: "Oswald";
+  font-style: normal;
+  /* Define o intervalo de pesos suportado pela Fonte Variável */
+  font-weight: 100 900;
+  font-display: swap;
+  /* Note: O nome da fonte agora é 'Oswald' */
+  src: url("/fonts/Oswald/Oswald-VariableFont_wght.ttf") format("truetype");
+}
+
+/* Carregamento da fonte Rebolto */
+@font-face {
+  font-family: "Reboto";
+  font-style: normal;
+  /* Define o intervalo de pesos suportado pela Fonte Variável */
+  font-weight: 100 900;
+  font-display: swap;
+  /* Note: O nome da fonte agora é 'Rebolto' */
+  src: url("/fonts/Reboto/Roboto-VariableFont_wdth,wght.ttf") format("truetype");
+}
+
 /* ESTENDENDO O TEMA PARA INCLUIR A FONTE JOSEFIN */
 @theme {
   /* Isso cria a classe Tailwind 'font-josefin' */
@@ -61,6 +83,16 @@
 @theme {
   /* Isso cria a classe Tailwind 'font-emilyscandy' */
   --font-emilyscandy: "EmilysCandy", system-ui, sans-serif;
+}
+
+@theme {
+  /* Isso cria a classe Tailwind 'font-oswald' */
+  --font-oswald: "Oswald", system-ui, sans-serif;
+}
+
+@theme {
+  /* Isso cria a classe Tailwind 'rebolto' */
+  --font-reboto: "Reboto", system-ui, sans-serif;
 }
 
 :root {
@@ -102,3 +134,4 @@
 }
 
 @import "tailwindcss";
+@import "tailwind-animations";

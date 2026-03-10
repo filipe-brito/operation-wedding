@@ -13,10 +13,10 @@ const MainLayout = () => {
   const isCheckoutPage = location.pathname === "/checkout";
 
   return (
-    <div className="font-[JosefinSans] min-h-screen min-w-screen bg-[#FCFBF6]">
+    <div className="font-[JosefinSans] text-xs min-h-screen min-w-screen bg-[#FCFBF6]">
       <LoadingModal />
-      <Header className="fixed w-full z-50" />
-      <main className="flex justify-center">
+      <Header className="fixed w-full" />
+      <main className="flex justify-center mt-2">
         <Outlet />
         {/* O Carrinho e o Botão ficam "vigiando" o layout inteiro */}
         {!isCheckoutPage && (

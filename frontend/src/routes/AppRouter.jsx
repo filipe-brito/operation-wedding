@@ -10,6 +10,7 @@ import GiftsPage from "../pages/GiftsPage";
 import CheckoutPage from "../pages/CheckoutPage";
 import MainLayout from "../layouts/MainLayout";
 import RSVPPage from "../pages/RSVPPage";
+import TestPage from "../pages/TestPage";
 
 const AppRouter = () => {
   // AppRouter é uma arrow function
@@ -20,6 +21,7 @@ const AppRouter = () => {
       <Routes>
         {/* Agrupamento de rotas que vamos definir */}
         <Route element={<MainLayout />}>
+          <Route path="/test" element={<TestPage />} />
           {/* Definindo a rota "/home" que aponta para o componente DashboardPage */}
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/home" element={<HomePage />} />

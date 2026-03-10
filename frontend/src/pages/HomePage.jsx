@@ -4,7 +4,7 @@ const Home = () => {
   return (
     <div className="w-full relative flex flex-col items-center">
       <section className="w-full flex flex-col items-center">
-        <h2 className="font-marcellus text-2xl mb-6 text-[#63461a]">
+        <h2 className="font-marcellus text-2xl mb-6 text-[#7E8C54]">
           Contagem Regressiva para o Grande Dia
         </h2>
         <CountdownTimer />

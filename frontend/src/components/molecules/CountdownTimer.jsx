@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLoading } from "@/context/LoadingContext"
+import { useLoading } from "@/context/LoadingContext";
 
 // Defina a data e hora do casamento
 const TARGET_DATE = new Date("2026-10-18T16:00:00").getTime();
@@ -12,7 +12,7 @@ export const CountdownTimer = () => {
     seconds: 0,
   });
 
-  const {setIsLoading} = useLoading();
+  const { setIsLoading } = useLoading();
 
   useEffect(() => {
     setIsLoading(true);
@@ -26,7 +26,7 @@ export const CountdownTimer = () => {
       // Cálculo do tempo restante
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor(
-        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
       );
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
@@ -42,11 +42,13 @@ export const CountdownTimer = () => {
     }, 1000);
 
     // Limpeza: Garante que o intervalo seja removido quando o componente for desmontado
-    return () => {clearTimeout(turnOff), clearInterval(interval);}
+    return () => {
+      (clearTimeout(turnOff), clearInterval(interval));
+    };
   }, []); //O array de dependências vazio garante que o efeito só rode na montagem
 
   return (
-    <div className="text-center text-[#5a461a] p-8">
+    <div className="text-center text-[#7E8C54] p-8">
       <div className="flex justify-center">
         {/* Bloco de Dias */}
         <div className="p-4 shadow-xl rounded-lg">
@@ -72,10 +74,13 @@ export const CountdownTimer = () => {
         </div>
 
         {/* Bloco de Segundos */}
-        <div className="p-4 shadow-xl rounded-lg  hidden sm:block">
+        <div className="p-4 shadow-xl rounded-lg hidden sm:block">
           {" "}
           {/* Oculta em telas muito pequenas */}
-          <h2 className="text-5xl">
+          <h2
+            key={timeRemaining.seconds}
+            className="text-5xl animate-expand-vertically"
+          >
             {timeRemaining.seconds.toString().padStart(2, "0")}
           </h2>
           <h3 className="text-sm">SEGUNDOS</h3>
