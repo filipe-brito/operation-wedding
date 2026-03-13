@@ -1,13 +1,13 @@
 import { CodeBarIcon, SuccessIcon, ProcessingIcon } from "../atoms/Icons";
 
 export const PaymentConclusion = ({ paymentData }) => {
-  switch (paymentData.paymentMethodType) {
+  switch (paymentData.payment_method_type) {
     case "bank_transfer":
       return (
         <PixPayment
           status={paymentData.status}
-          qrCodeBase64={paymentData.qrCodeBase64}
-          qrCode={paymentData.qrCode}
+          qrCodeBase64={paymentData.qr_code_base_64}
+          qrCode={paymentData.qr_code}
         />
       );
 
@@ -15,10 +15,10 @@ export const PaymentConclusion = ({ paymentData }) => {
       return (
         <CreditCardPayment
           status={paymentData.status}
-          paymentId={paymentData.paymentId}
-          paymentMethodId={paymentData.paymentMethodId}
-          totalPaidAmount={paymentData.totalPaidAmount}
-          message={paymentData.friendlyMessage}
+          paymentId={paymentData.payment_id}
+          paymentMethodId={paymentData.payment_method_id}
+          totalPaidAmount={paymentData.total_paid_amount}
+          message={paymentData.friendly_message}
         />
       );
   }

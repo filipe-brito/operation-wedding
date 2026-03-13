@@ -13,7 +13,7 @@ const MainLayout = () => {
   const isCheckoutPage = location.pathname === "/checkout";
 
   return (
-    <div className="font-[JosefinSans] text-xs min-h-screen min-w-screen bg-[#FCFBF6]">
+    <div className="font-[JosefinSans] text-xs md:min-h-screen md:min-w-screen bg-[#FCFBF6]">
       <LoadingModal />
       <Header className="fixed w-full" />
       <main className="flex justify-center mt-2">

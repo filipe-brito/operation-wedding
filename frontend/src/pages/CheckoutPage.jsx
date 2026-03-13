@@ -67,7 +67,7 @@ const CheckoutPage = () => {
             Ocorreu um erro no processamento do pagamento.
           </h2>
           <p className="font-josefin text-stone-600 mb-6">
-            {paymentReturn.friendlyMessage}
+            {paymentReturn.mp_error_data.friendly_message}
           </p>
           <button
             onClick={() => setPaymentStatus("process")} // Volta para o Brick
