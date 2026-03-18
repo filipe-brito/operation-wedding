@@ -84,8 +84,8 @@ export const Header = () => {
   };
 
   return (
-    <header className="font-[Reboto] text-[#7E8C54] text-sm tracking-widest font-normal h-[15dvh] top-0 w-full fixed justify-center items-center bg-[#FCFBF6] border-b border-[#5a461a]/30 z-50">
-      <div className="w-8/10 flex items-center mx-auto">
+    <header className="font-[Reboto] text-[#7E8C54] text-sm tracking-widest font-normal md:h-[15dvh] top-0 w-full fixed justify-center items-center bg-[#FCFBF6] border-b border-[#5a461a]/30 z-50">
+      <div className="w-8/10 flex items-center mx-auto h-full">
         <h1 className="flex items-center gap-4 font-[GreatVibes] text-2xl">
           <img
             src="/main_logo.svg"

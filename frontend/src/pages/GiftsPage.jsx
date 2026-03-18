@@ -15,7 +15,7 @@ const GiftsPage = () => {
       console.log("Catálogo de presentes: ", response);
       setIsLoading(false);
     } catch (error) {
-      console.error("Erro ao buscar catálogo de presentes!");
+      setIsLoading(false);
     }
   };
 
@@ -25,7 +25,7 @@ const GiftsPage = () => {
   }, []);
 
   return (
-    <div className="w-8/10 border-red relative grid grid-cols-3 items-center gap-4">
+    <div className="w-8/10 relative grid md:grid-cols-3 grid-cols-1 gap-4">
       {catalog.map((gift) => (
         <GiftCard
           key={gift.id}

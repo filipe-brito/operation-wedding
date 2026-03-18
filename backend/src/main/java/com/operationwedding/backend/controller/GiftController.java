@@ -37,9 +37,9 @@ public class GiftController {
 		System.out.println("Chave de idempotência recebido do front: " + idempotencyKey.toString());
 		System.out.println("Corpo recebido do front: " + objectMapper.writeValueAsString(paymentDTO));
 
-		ResponseEntity<PaymentResponseDTO> response = giftService.processGift(paymentDTO, idempotencyKey);
+		PaymentResponseDTO response = giftService.processGift(paymentDTO, idempotencyKey);
 
-		return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping("/catalog")

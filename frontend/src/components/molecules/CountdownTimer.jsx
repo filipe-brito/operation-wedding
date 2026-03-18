@@ -48,8 +48,8 @@ export const CountdownTimer = () => {
   }, []); //O array de dependências vazio garante que o efeito só rode na montagem
 
   return (
-    <div className="text-center text-[#7E8C54] p-8">
-      <div className="flex justify-center">
+    <div className="text-center text-[#7E8C54] p-2">
+      <div className="md:flex grid grid-cols-2 justify-center">
         {/* Bloco de Dias */}
         <div className="p-4 shadow-xl rounded-lg">
           <h2 className="text-5xl font-bold">{timeRemaining.days}</h2>
@@ -74,7 +74,7 @@ export const CountdownTimer = () => {
         </div>
 
         {/* Bloco de Segundos */}
-        <div className="p-4 shadow-xl rounded-lg hidden sm:block">
+        <div className="p-4 shadow-xl rounded-lg block">
           {" "}
           {/* Oculta em telas muito pequenas */}
           <h2

@@ -25,7 +25,7 @@ export const GiftCard = ({ id, image, name, price }) => {
   };
 
   return (
-    <div className="w-8/10 flex flex-col group py-4 bg-white rounded-xl shadow-2xl hover:shadow-md transition-shadow duration-300 overflow-hidden border border-stone-100">
+    <div className="mx-auto w-8/10 flex flex-col group py-4 bg-white rounded-xl shadow-2xl hover:shadow-md transition-shadow duration-300 overflow-hidden border border-stone-100">
       <div className="relative h-36 overflow-hidden">
         <img
           src={image}

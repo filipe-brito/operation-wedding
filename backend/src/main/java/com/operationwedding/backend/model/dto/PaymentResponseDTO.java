@@ -3,21 +3,29 @@ package com.operationwedding.backend.model.dto;
 import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * DTO that represents the payment response to be returned to the frontend
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PaymentResponseDTO {
-	
+	@JsonProperty("external_reference")
 	private String externalReference;
 	private String status; // approved, rejected, pending
+	@JsonProperty("payment_method_id")
 	private String paymentMethodId;
+	@JsonProperty("payment_method_type")
 	private String paymentMethodType;
 	private String detail; // O código original (insufficient_amount)
+	@JsonProperty("friendly_message")
 	private String friendlyMessage; // A tradução amigável
+	@JsonProperty("payment_id")
 	private String paymentId; // Id do pagamento para o Brick de status
+	@JsonProperty("qr_code_base_64")
 	private String qrCodeBase64; // Se for PIX
+	@JsonProperty("qr_code")
 	private String qrCode; // Se for PIX (texto do copia e cola)
+	@JsonProperty("total_paid_amount")
 	private BigDecimal totalPaidAmount;
 
 	public String getExternalReference() {

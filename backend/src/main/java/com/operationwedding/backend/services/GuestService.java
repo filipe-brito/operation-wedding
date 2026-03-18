@@ -20,22 +20,11 @@ public class GuestService {
 	@Autowired
 	private GuestRespository guestRepository;
 	
-	public GuestDTO searchGuestToConfirm(String phone) {
-		Guest guest = guestRepository.findByPhone(phone).orElseThrow(() -> new EntityNotFoundException("Convidado não localizado"));
-		if(!guest.getStatus().equals(GuestStatus.PENDING)) {
-			throw new IllegalStateException("Convidado já respondeu a confirmação");
-		}
-		GuestDTO dto = new GuestDTO();
-		dto.setFullName(guest.getFullName());
-		dto.setPhone(guest.getPhone());
-		
-		return dto;
-	}
 	@Transactional
 	public void confirmAttendenceAndCompanions(GuestDTO dto) {
 		Guest guest = guestRepository.findByPhone(dto.getPhone()).orElseThrow(() -> new EntityNotFoundException("Convidado não localizado"));
 		if(!guest.getStatus().equals(GuestStatus.PENDING)) {
-			throw new IllegalStateException("Convidado já respondeu a confirmação");
+			throw new IllegalStateException("Convidado já respondeu a confirmação.");
 		};
 		guest.setStatus(dto.getWillAttend() ? GuestStatus.CONFIRMED : GuestStatus.WILL_NOT_ATTEND);
 		guest.setConfirmedAt(OffsetDateTime.now());

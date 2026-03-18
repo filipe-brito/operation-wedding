@@ -4,10 +4,10 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.operationwedding.backend.client.MercadoPagoClient;
 import com.operationwedding.backend.model.dto.GiftItemDTO;
 import com.operationwedding.backend.model.dto.PaymentRequestDTO;
 import com.operationwedding.backend.model.dto.PaymentResponseDTO;
@@ -17,17 +17,13 @@ import com.operationwedding.backend.model.mapper.GiftMapper;
 import com.operationwedding.backend.model.mapper.PaymentMapper;
 import com.operationwedding.backend.model.payload.MPFetchPaymentResponse;
 import com.operationwedding.backend.model.payload.MPOrderRequest;
-import com.operationwedding.backend.model.payload.MPProcessPaymentResponse;
 import com.operationwedding.backend.repositories.GiftsCatalogRepository;
 import com.operationwedding.backend.repositories.GiftsReceivedRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 @Service
-public class GiftService {
-	@Autowired
-	private MercadoPagoService MPService;
-	
+public class GiftService {	
 	@Autowired
 	private GiftsCatalogRepository giftsCatalogRepository;
 	
@@ -35,26 +31,23 @@ public class GiftService {
 	private GiftsReceivedRepository giftsReceivedRepository;
 	
 	@Autowired
-	private MercadoPagoService mpService;
+	private MercadoPagoClient mpClient;
 	
 	@Autowired
 	private GiftMapper giftMapper;
 	
 	@Transactional
-	public ResponseEntity<PaymentResponseDTO> processGift(PaymentRequestDTO dto, String idempotencyKey){
+	public PaymentResponseDTO processGift(PaymentRequestDTO dto, String idempotencyKey){
 		MPOrderRequest requestBody = PaymentMapper.toMPOrderRequest(dto);
-		ResponseEntity<MPProcessPaymentResponse> processPaymentResponse = MPService.proccessMPPayment(requestBody, idempotencyKey);
+		PaymentResponseDTO processPaymentResponse = mpClient.proccessMPPayment(requestBody, idempotencyKey);
 		
-		String status = processPaymentResponse.getBody().getTransactions().getPayments().get(0).getStatus();
+		String status = processPaymentResponse.getStatus();
 		if(status.equals("processed") || status.equals("action_required") || status.equals("processing")) {
-			GiftReceived giftReceived = giftMapper.toEntity(dto, processPaymentResponse.getBody());
+			GiftReceived giftReceived = giftMapper.toEntity(dto, processPaymentResponse);
 			giftsReceivedRepository.save(giftReceived);
 		}
 		
-		PaymentResponseDTO responseDto = PaymentMapper
-				.toPaymentResponse(processPaymentResponse.getBody());
-		
-		return ResponseEntity.status(processPaymentResponse.getStatusCode()).body(responseDto);
+		return processPaymentResponse;
 	}
 	
 	private GiftReceived fetchGift(String externalReference) {
@@ -64,8 +57,8 @@ public class GiftService {
 	
 	@Transactional
 	public void updateGift(String xSignature, String xRequestId, String dataId, String externalReference) {
-		mpService.MPPaymentValidation(xSignature, xRequestId, dataId);
-		MPFetchPaymentResponse mpPayment = mpService.fetchMPPayment(externalReference).getBody();
+		mpClient.MPPaymentValidation(xSignature, xRequestId, dataId);
+		MPFetchPaymentResponse mpPayment = mpClient.fetchMPPayment(externalReference).getBody();
 		GiftReceived giftReceived = fetchGift(externalReference);
 		BigDecimal amountPaid = null;
 		BigDecimal amountReceived = null;
