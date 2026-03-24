@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,9 @@ import com.operationwedding.backend.model.dto.GiftItemDTO;
 import com.operationwedding.backend.model.dto.PaymentRequestDTO;
 import com.operationwedding.backend.model.dto.PaymentResponseDTO;
 import com.operationwedding.backend.services.GiftService;
+import com.operationwedding.backend.services.TurnstileService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
@@ -30,10 +33,18 @@ public class GiftController {
 	private ObjectMapper objectMapper;
 	@Autowired
 	private GiftService giftService;
+	@Autowired
+	TurnstileService tService;
 
 	@PostMapping("/process")
-	public ResponseEntity<PaymentResponseDTO> processPayment(@RequestBody @Valid PaymentRequestDTO paymentDTO,
+	public ResponseEntity<PaymentResponseDTO> processPayment(HttpServletRequest request, @RequestBody @Valid PaymentRequestDTO paymentDTO,
 			@RequestHeader("X-Idempotency-Key") String idempotencyKey) {
+		String clientIp = request.getRemoteAddr();
+		System.out.println("IP que será enviado ao CAPTCHA do Cloudflare: " + clientIp);
+		boolean isHuman = tService.isHuman(paymentDTO.getCaptchaToken(), clientIp);
+		if(!isHuman) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+		}		
 		System.out.println("Chave de idempotência recebido do front: " + idempotencyKey.toString());
 		System.out.println("Corpo recebido do front: " + objectMapper.writeValueAsString(paymentDTO));
 

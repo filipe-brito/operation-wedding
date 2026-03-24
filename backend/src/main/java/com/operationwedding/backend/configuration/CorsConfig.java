@@ -10,7 +10,7 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
     	System.out.println(">>> Configuração de CORS aplicada com sucesso! <<<");
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:5173") // Use o endereço do seu Vite/React
+                .allowedOrigins("http://localhost:5173", "https://lindinhos.filipixel.com") // Use o endereço do seu Vite/React
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*");
     }

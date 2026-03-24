@@ -1,8 +1,9 @@
 import { useForm, useFieldArray, Controller } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AddIcon, DeleteIcon } from "../atoms/Icons";
 import { ConfirmAttendance } from "@/service/UtilsService";
 import { IMaskInput } from "react-imask";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 export const RSVPForm = ({ setIsLoading, setStatus, setErrorMessage }) => {
   const {
@@ -11,9 +12,11 @@ export const RSVPForm = ({ setIsLoading, setStatus, setErrorMessage }) => {
     control,
     watch,
     formState: { errors },
+    setValue
   } = useForm();
 
   const willAttend = watch("will_attend");
+  const [ captchaToken, setCaptchaToken ] = useState(null);
 
   useEffect(() => {
     if (willAttend === "false") {
@@ -21,14 +24,18 @@ export const RSVPForm = ({ setIsLoading, setStatus, setErrorMessage }) => {
     }
   }, [willAttend]);
 
+  useEffect(() => {
+    setValue("captcha_token", captchaToken); // Armazena o token no React Hook Form
+  }, [captchaToken]);
+
   const onSubmit = async (data) => {
     console.log("Dados da mensagem: ", data);
     console.log("Acompanhantes: ", fields);
 
     try {
       setIsLoading(true);
-      const response = await ConfirmAttendance(data);
       willAttend ? setStatus("will_attend") : setStatus("will_not_attend");
+      const response = await ConfirmAttendance(data);      
       setIsLoading(false);
     } catch (error) {
       setErrorMessage(
@@ -242,10 +249,22 @@ export const RSVPForm = ({ setIsLoading, setStatus, setErrorMessage }) => {
           </div>
         </div>
 
+        <div className="flex justify-center my-4"> 
+          <Turnstile 
+          siteKey={import.meta.env.VITE_CLOUDFLARE_TURNSTILE_SITE_KEY} 
+            onSuccess={(token) => {
+              console.log("A Cloudflare confirmou humanidade:", token);
+              setCaptchaToken(token)}}
+            onError={() => setCaptchaToken(null)}
+            onExpire={() => setCaptchaToken(null)}
+          />
+        </div>
+
         <div className="flex flex-col w-full items-center mt-4 p-2">
           <button
             type="submit"
-            className="bg-[#7E8C54] active:animate-jelly cursor-pointer md:w-60 p-2 flex items-center justify-center gap-2 text-2xl font-semibold text-white hover:bg-[#535C39] transition duration-300"
+            disabled={!captchaToken}
+            className="bg-[#7E8C54] active:animate-jelly cursor-pointer md:w-60 p-2 flex items-center justify-center gap-2 text-2xl font-semibold text-white hover:bg-[#535C39] transition duration-300 disabled:opacity-30 disabled:cursor-not-allowed"
           >
             Confirmar
           </button>

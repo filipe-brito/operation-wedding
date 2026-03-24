@@ -13,6 +13,9 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class GuestDTO {
+	@JsonProperty("captcha_token")
+	@NotBlank(message="O token de validação de humanidade é obrigatório")
+	private String captchaToken;
 	@JsonProperty("full_name")
 	private String fullName;
 	@NotBlank(message="Telefone é obrigatório")
@@ -27,6 +30,12 @@ public class GuestDTO {
 	@Valid
 	private List<CompanionDTO> companions = new ArrayList<>();
 	
+	public String getCaptchaToken() {
+		return captchaToken;
+	}
+	public void setCaptchaToken(String captchaToken) {
+		this.captchaToken = captchaToken;
+	}
 	public String getFullName() {
 		return fullName;
 	}

@@ -6,6 +6,8 @@ import { LoadingIcon } from "../atoms/Icons";
 export const ProcessPayment = ({
   handlePaymentSuccess,
   handlePaymentFailure,
+  captchaToken,
+  setCaptchaToken
 }) => {
   const { cart, totalValue, donorName, message } = useCart();
 
@@ -13,7 +15,6 @@ export const ProcessPayment = ({
 
   return (
     <div className="w-full flex justify-center">
-      {/* COLUNA DA DIREITA: O "Brick" do Mercado Pago */}
       <div className="bg-white p-6 rounded-xl shadow-sm border border-stone-100">
         {!brickIsReady && (
           <div className="w-full h-full flex items-center justify-center">
@@ -36,6 +37,8 @@ export const ProcessPayment = ({
             brickIsReady={setBrickIsReady}
             onPaymentSuccess={handlePaymentSuccess}
             onPaymentFailure={handlePaymentFailure}
+            captchaToken={captchaToken}
+            setCaptchaToken={setCaptchaToken}
           />
         </div>
       </div>

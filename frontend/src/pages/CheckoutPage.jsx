@@ -4,6 +4,7 @@ import { ProcessPayment } from "../components/organisms/ProcessPayment";
 import { PaymentConclusion } from "../components/organisms/PaymentConclusion";
 import { FailureIcon } from "../components/atoms/Icons";
 import { GiftReview } from "../components/organisms/GiftReview";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 const CheckoutPage = () => {
   const { cart } = useCart();
@@ -32,6 +33,7 @@ const CheckoutPage = () => {
 
   const [paymentStatus, setPaymentStatus] = useState("review"); // "pending", "success", "failure" e loading
   const [paymentReturn, setPaymentReturn] = useState(null);
+  const [ captchaToken, setCaptchaToken ] = useState(null);
 
   const activeStyle =
     "whitespace-nowrap flex items-center justify-center w-54 p-2 text-stone-100 bg-[#575b43] border-none";
@@ -45,11 +47,38 @@ const CheckoutPage = () => {
       paymentProcessPainel = <GiftReview setPaymentStatus={setPaymentStatus} />;
       break;
 
+    case "captcha":
+      paymentProcessPainel = (
+        <div className="flex flex-col items-center bg-white p-10 rounded-2xl shadow-sm text-center">
+          <div className="flex justify-center my-4"> 
+            <Turnstile 
+            siteKey={import.meta.env.VITE_CLOUDFLARE_TURNSTILE_SITE_KEY} 
+              onSuccess={(token) => {
+                console.log("A Cloudflare confirmou humanidade:", token);
+                setCaptchaToken(token);
+                setPaymentStatus("process");
+              }}
+              onError={() => {
+                setCaptchaToken(null);
+                setPaymentStatus("captcha");
+              }}
+              onExpire={() => {
+                setCaptchaToken(null);
+                setPaymentStatus("captcha");
+              }}
+            />
+          </div>
+        </div>
+      );
+      break;
+
     case "process":
       paymentProcessPainel = (
         <ProcessPayment
           handlePaymentSuccess={handlePaymentSuccess}
           handlePaymentFailure={handlePaymentFailure}
+          captchaToken={captchaToken}
+          setCaptchaToken={setCaptchaToken}
         />
       );
       break;

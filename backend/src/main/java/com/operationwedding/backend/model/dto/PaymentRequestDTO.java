@@ -14,6 +14,9 @@ import jakarta.validation.constraints.Size;
  * DTO that representing the payment request sent by the frontend
  */
 public class PaymentRequestDTO {
+	@JsonProperty("captcha_token")
+	@NotNull(message="Falha na validação de humanidade")
+	private String captchaToken;
 	@JsonProperty("gift_items")
 	@NotNull(message="Selecione ao menos um item para o presente")
 	private List<GiftItemDTO> giftItems;
@@ -33,6 +36,13 @@ public class PaymentRequestDTO {
 	@JsonProperty("token")
 	private String cardToken;
 	private Integer installments;
+	
+	public String getCaptchaToken() {
+		return captchaToken;
+	}
+	public void setCaptchaToken(String captchaToken) {
+		this.captchaToken = captchaToken;
+	}
 	
 	public List<GiftItemDTO> getGiftItems() {
 		return giftItems;

@@ -1,4 +1,4 @@
-import { useState, memo, useMemo, useCallback } from "react"; // Adicionado useState
+import { memo, useMemo, useCallback } from "react"; // Adicionado useState
 import { Payment, initMercadoPago } from "@mercadopago/sdk-react";
 import axios from "axios";
 import { useLoading } from "@/context/LoadingContext";
@@ -15,16 +15,16 @@ const PaymentComponent = ({
   brickIsReady,
   onPaymentSuccess,
   onPaymentFailure,
+  captchaToken,
+  setCaptchaToken
 }) => {
   const { setIsLoading } = useLoading();
 
-  const [fixedAmount] = useState(amount);
-
   const initialization = useMemo(
     () => ({
-      amount: fixedAmount, // Usamos o valor que foi "congelado" na montagem
+      amount: amount, // Usamos o valor que foi "congelado" na montagem
     }),
-    [fixedAmount],
+    [amount],
   );
 
   const customization = useMemo(
@@ -41,6 +41,7 @@ const PaymentComponent = ({
 
   const onSubmit = async ({ formData }) => {
     const dataForBackend = {
+      captcha_token: captchaToken,
       donor_name: donorName,
       donor_message: message,
       ...formData,
@@ -52,7 +53,7 @@ const PaymentComponent = ({
       setIsLoading(true);
       console.log("Dados enviados ao backend: ", dataForBackend);
       axios({
-        url: "http://localhost:8080/api/gifts/process",
+        url: "https://lindinhos.filipixel.com/api/gifts/process",
         method: "POST",
         headers: {
           "Content-Type": "application/json",

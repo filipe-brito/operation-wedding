@@ -22,7 +22,7 @@ export const GiftReview = ({ setPaymentStatus }) => {
   const onSubmit = (data) => {
     setDonorName(data.fullName);
     setMessage(data.message);
-    setPaymentStatus("process");
+    setPaymentStatus("captcha");
     console.log("Dados da mensagem: ", cart);
   };
   return (
