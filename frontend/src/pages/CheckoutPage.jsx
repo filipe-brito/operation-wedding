@@ -33,7 +33,7 @@ const CheckoutPage = () => {
 
   const [paymentStatus, setPaymentStatus] = useState("review"); // "pending", "success", "failure" e loading
   const [paymentReturn, setPaymentReturn] = useState(null);
-  const [ captchaToken, setCaptchaToken ] = useState(null);
+  const [captchaToken, setCaptchaToken] = useState(null);
 
   const activeStyle =
     "whitespace-nowrap flex items-center justify-center w-54 p-2 text-stone-100 bg-[#575b43] border-none";
@@ -50,9 +50,9 @@ const CheckoutPage = () => {
     case "captcha":
       paymentProcessPainel = (
         <div className="flex flex-col items-center bg-white p-10 rounded-2xl shadow-sm text-center">
-          <div className="flex justify-center my-4"> 
-            <Turnstile 
-            siteKey={import.meta.env.VITE_CLOUDFLARE_TURNSTILE_SITE_KEY} 
+          <div className="flex justify-center my-4">
+            <Turnstile
+              siteKey={import.meta.env.VITE_CLOUDFLARE_TURNSTILE_SITE_KEY}
               onSuccess={(token) => {
                 console.log("A Cloudflare confirmou humanidade:", token);
                 setCaptchaToken(token);
@@ -96,10 +96,10 @@ const CheckoutPage = () => {
             Ocorreu um erro no processamento do pagamento.
           </h2>
           <p className="font-josefin text-stone-600 mb-6">
-            {paymentReturn.mp_error_data.friendly_message}
+            {paymentReturn.message}
           </p>
           <button
-            onClick={() => setPaymentStatus("process")} // Volta para o Brick
+            onClick={() => setPaymentStatus("captcha")}
             className="px-8 py-2 bg-[#575b43] text-white rounded-lg hover:bg-[#454936] transition-colors cursor-pointer"
           >
             Tentar novamente com outro meio de pagamento

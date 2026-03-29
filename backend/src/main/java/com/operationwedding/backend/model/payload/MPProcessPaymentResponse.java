@@ -3,6 +3,7 @@ package com.operationwedding.backend.model.payload;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,8 +13,7 @@ public class MPProcessPaymentResponse {
 	private String externalReference;
 	@JsonProperty("total_paid_amount")
 	private BigDecimal totalPaidAmount;
-	private Transactions transactions;
-	private List<Error> errors; 
+	private Transactions transactions; 
 	
 	public String getExternalReference() {
 		return externalReference;
@@ -33,17 +33,17 @@ public class MPProcessPaymentResponse {
 	public void setTransactions(Transactions transactions) {
 		this.transactions = transactions;
 	}
-	public List<Error> getErrors() {
-		return errors;
-	}
-	public void setErrors(List<Error> errors) {
-		this.errors = errors;
-	}
 
 
 	@JsonIgnoreProperties(ignoreUnknown = true)
 	public static class Transactions {
 		private List<Payment> payments;
+
+		@JsonCreator
+		public Transactions(@JsonProperty(required=true) List<Payment> payments) {
+			this.payments = payments;
+		}
+
 		public List<Payment> getPayments() {
 			return payments;
 		}
@@ -61,6 +61,19 @@ public class MPProcessPaymentResponse {
 			@JsonProperty("payment_method")
 			private PaymentMethod paymentMethod; 
 			
+			@JsonCreator
+			public Payment(
+				@JsonProperty(required=true) String id, 
+				@JsonProperty(required=true) String status, 
+				@JsonProperty(required=true) String statusDetail, 
+				@JsonProperty(required=true) PaymentMethod paymentMethod
+			) {
+				this.id = id;
+				this.status = status;
+				this.statusDetail = statusDetail;
+				this.paymentMethod = paymentMethod;
+			}
+
 			public String getId() {
 				return id;
 			}
@@ -120,32 +133,6 @@ public class MPProcessPaymentResponse {
 					this.qrCodeBase64 = qrCodeBase64;
 				}
 			}
-		}
-	}
-	
-	@JsonIgnoreProperties(ignoreUnknown = true)
-	public static class Error {
-		private String code;
-		private String message;
-		private String details;
-		
-		public String getCode() {
-			return code;
-		}
-		public void setCode(String code) {
-			this.code = code;
-		}
-		public String getMessage() {
-			return message;
-		}
-		public void setMessage(String message) {
-			this.message = message;
-		}
-		public String getDetails() {
-			return details;
-		}
-		public void setDetails(String details) {
-			this.details = details;
 		}
 	}
 }

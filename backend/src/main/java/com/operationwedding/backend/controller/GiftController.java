@@ -3,6 +3,9 @@ package com.operationwedding.backend.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,6 +23,7 @@ import com.operationwedding.backend.model.dto.PaymentRequestDTO;
 import com.operationwedding.backend.model.dto.PaymentResponseDTO;
 import com.operationwedding.backend.services.GiftService;
 import com.operationwedding.backend.services.TurnstileService;
+import com.operationwedding.backend.utils.LogUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -35,31 +39,49 @@ public class GiftController {
 	private GiftService giftService;
 	@Autowired
 	TurnstileService tService;
+	
+	private static final Logger log = LoggerFactory.getLogger(GiftController.class);
 
 	@PostMapping("/process")
-	public ResponseEntity<PaymentResponseDTO> processPayment(HttpServletRequest request, @RequestBody @Valid PaymentRequestDTO paymentDTO,
-			@RequestHeader("X-Idempotency-Key") String idempotencyKey) {
+	public ResponseEntity<PaymentResponseDTO> processPayment(
+		HttpServletRequest request, 
+		@RequestBody @Valid PaymentRequestDTO paymentDTO,
+		@RequestHeader("X-Idempotency-Key") String idempotencyKey
+	) {
+		MDC.put("trace_id", paymentDTO.getExternalReference());
+		MDC.put("process_name", "PAYMENT_PROCESS");
 		String clientIp = request.getRemoteAddr();
-		System.out.println("IP que será enviado ao CAPTCHA do Cloudflare: " + clientIp);
+		if(log.isDebugEnabled()){
+			log.debug("[PAYMENT REQUEST RECEIVED] Payload request: {}", objectMapper.writeValueAsString(paymentDTO));
+		}
+		
+		log.info(
+			"[PAYMENT REQUEST RECEIVED] Client IP: {} | Payer name: {} | Payment method: {}", 
+			clientIp, 
+			paymentDTO.getDonorName(), 
+			paymentDTO.getPaymentMethodId()
+		);
 		boolean isHuman = tService.isHuman(paymentDTO.getCaptchaToken(), clientIp);
 		if(!isHuman) {
+			log.warn("[HUMANITY TEST] Result: FAILED");
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-		}		
-		System.out.println("Chave de idempotência recebido do front: " + idempotencyKey.toString());
-		System.out.println("Corpo recebido do front: " + objectMapper.writeValueAsString(paymentDTO));
+		}
+		log.info("[HUMANITY TEST] Result: SUCCESS");		
 
 		PaymentResponseDTO response = giftService.processGift(paymentDTO, idempotencyKey);
-
+		
+		log.info("[PAYMENT PROCESSED SUCCESSFULLY] Result: the payment was processed without incident. Returning client response | Response to the client {}", LogUtils.mask(objectMapper.writeValueAsString(response)));	
 		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping("/catalog")
 	public ResponseEntity<List<GiftItemDTO>> getGiftsCatalog() {
-		System.out.println("==================Lista de Presentes consultadas no banco=====================");
-		ResponseEntity<List<GiftItemDTO>> response = giftService.getGiftCatalog();
-		System.out.println(objectMapper.writeValueAsString(response));
+		MDC.put("process_name", "GIFT_CATALOG_CONSULT");
+		log.info("Requisition to gift catalog received");
+		List<GiftItemDTO> response = giftService.getGiftCatalog();
+		log.info("Returning gift catalog to the client");
 
-		return response;
+		return ResponseEntity.ok(response);
 	}
 
 	@PostMapping("/webhook")
@@ -71,12 +93,12 @@ public class GiftController {
 				@RequestParam("data.id") String dataId,
 				@RequestParam("data.external_reference") String externalReference
 			) {
-		System.out.println("======================================================================");
-		System.out.println("x-signature = " + xSignature + "\nx-request-id = " + xRequestId + "\ndata.id = " + dataId);
-		System.out.println("Corpo recebido do Webhook: " + objectMapper.writeValueAsString(payload));
-		System.out.println("======================================================================");
+		MDC.put("process_name", "PAYMENT_PROCESS_MERCADO_PAGO_WEBHOOK_NOTIFICATION");
+		MDC.put("trace_id", externalReference);
+		log.info("Mercado Pago notification received | x-Signature: {} | x-Request-Id: {} | Resquest body: {}", xSignature, xRequestId, LogUtils.mask(objectMapper.writeValueAsString(payload)));
 		
-		giftService.updateGift(xSignature, xRequestId, dataId, externalReference);		
+		giftService.updateGift(xSignature, xRequestId, dataId, externalReference);	
+		log.info("Mercado Pago notification was processed successfully");	
 		
 		return ResponseEntity.ok(null);
 	}

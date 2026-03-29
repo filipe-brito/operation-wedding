@@ -2,10 +2,12 @@ package com.operationwedding.backend.model.dto;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -14,6 +16,7 @@ import jakarta.validation.constraints.Size;
  * DTO that representing the payment request sent by the frontend
  */
 public class PaymentRequestDTO {
+	private String externalReference = "REF_" + UUID.randomUUID().toString().replace("-", "_"); // Será usado como referência no banco de dados futuramente
 	@JsonProperty("captcha_token")
 	@NotNull(message="Falha na validação de humanidade")
 	private String captchaToken;
@@ -31,11 +34,19 @@ public class PaymentRequestDTO {
 	@DecimalMin(value="10.00", message="O valor do presente deve ser maior que R$10,00")
 	private BigDecimal transactionAmount;
 	@JsonProperty("payment_method_id")
+	@NotBlank(message="Id do meio de pagamento é obrigatório")
 	private String paymentMethodId;
 	private Payer payer;
 	@JsonProperty("token")
 	private String cardToken;
 	private Integer installments;
+
+	public String getExternalReference() {
+		return externalReference;
+	}
+	public void setExternalReference(String externalReference) {
+		this.externalReference = externalReference;
+	}
 	
 	public String getCaptchaToken() {
 		return captchaToken;

@@ -1,7 +1,6 @@
 package com.operationwedding.backend.model.payload;
 
 import java.util.List;
-import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,9 +9,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class MPOrderRequest {
 	private String type = "online";
 	@JsonProperty("external_reference")
-	private String externalReference = "REF_" + UUID.randomUUID().toString().replace("-", "_"); // Será usado como referência no banco de dados futuramente
+	private String externalReference;
 	private Transactions transactions;
 	private Payer payer;
+	//Convention: monetary values are handled as Strings for external clients
 	@JsonProperty("total_amount")
 	private String totalAmount;
 	
@@ -61,6 +61,7 @@ public class MPOrderRequest {
 
 		@JsonInclude(JsonInclude.Include.NON_NULL)
 		public static class Payment {
+			//Convention: monetary values are handled as Strings for external clients
 			private String amount;
 			@JsonProperty("payment_method")
 			private PaymentMethod paymentMethod;

@@ -3,11 +3,15 @@ package com.operationwedding.backend.services;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import com.operationwedding.backend.client.MercadoPagoClient;
+import com.operationwedding.backend.exception.BusinessException;
+import com.operationwedding.backend.exception.MPPaymentException;
 import com.operationwedding.backend.model.dto.GiftItemDTO;
 import com.operationwedding.backend.model.dto.PaymentRequestDTO;
 import com.operationwedding.backend.model.dto.PaymentResponseDTO;
@@ -20,65 +24,97 @@ import com.operationwedding.backend.model.payload.MPOrderRequest;
 import com.operationwedding.backend.repositories.GiftsCatalogRepository;
 import com.operationwedding.backend.repositories.GiftsReceivedRepository;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+
 @Service
-public class GiftService {	
+public class GiftService {
 	@Autowired
 	private GiftsCatalogRepository giftsCatalogRepository;
-	
+
 	@Autowired
 	private GiftsReceivedRepository giftsReceivedRepository;
-	
+
 	@Autowired
 	private MercadoPagoClient mpClient;
-	
+
 	@Autowired
 	private GiftMapper giftMapper;
-	
+
+	private static final Logger log = LoggerFactory.getLogger(GiftService.class);
+
 	@Transactional
-	public PaymentResponseDTO processGift(PaymentRequestDTO dto, String idempotencyKey){
+	public PaymentResponseDTO processGift(PaymentRequestDTO dto, String idempotencyKey) {
 		MPOrderRequest requestBody = PaymentMapper.toMPOrderRequest(dto);
-		PaymentResponseDTO processPaymentResponse = mpClient.proccessMPPayment(requestBody, idempotencyKey);
-		
-		String status = processPaymentResponse.getStatus();
-		if(status.equals("processed") || status.equals("action_required") || status.equals("processing")) {
+		try{
+			PaymentResponseDTO processPaymentResponse = mpClient.proccessMPPayment(requestBody, idempotencyKey);
 			GiftReceived giftReceived = giftMapper.toEntity(dto, processPaymentResponse);
 			giftsReceivedRepository.save(giftReceived);
-		}
-		
-		return processPaymentResponse;
+			log.info("[PAYMENT DATA PERSISTENCE COMPLETE]");
+
+			return processPaymentResponse;
+		} catch (MPPaymentException e) {
+			if(e.getStatusCode().is4xxClientError()){
+				String message = PaymentMapper.MESSAGES.getOrDefault(e.getStatusDetail(), "Mercado Pago retornou um erro inesperado ao processar o pagamento.");
+				throw new BusinessException(e.getStatusCode().value(), e.getErrorTitle(), message);
+			} else {
+				throw new BusinessException(e.getStatusCode().value(), e.getErrorTitle(), "Mercado Pago retornou um erro inesperado ao processar o pagamento.");
+			}
+		} catch (Exception e) {
+				log.error("[ERROR ON PAYMENT DATA PERSISTENCE] Description: {} | Message: {} | Error: {}", e.getCause(), e.getMessage(), e);
+				throw new BusinessException(500, "Ocorreu um erro inesperado.", "Erro ao persistir os dados do pagamento. Contacte o administrador.");
+			}
 	}
-	
-	private GiftReceived fetchGift(String externalReference) {
-	    return giftsReceivedRepository.findByExternalReference(externalReference)
-	        .orElseThrow(() -> new EntityNotFoundException("Presente não encontrado na banco de dados"));
-	}
-	
+
 	@Transactional
 	public void updateGift(String xSignature, String xRequestId, String dataId, String externalReference) {
-		mpClient.MPPaymentValidation(xSignature, xRequestId, dataId);
+		log.info("Initiating payment verification on Mercado Pago");
+		mpClient.mpPaymentValidation(xSignature, xRequestId, dataId);
 		MPFetchPaymentResponse mpPayment = mpClient.fetchMPPayment(externalReference).getBody();
-		GiftReceived giftReceived = fetchGift(externalReference);
+		log.info("Searching payment in the database");
+		GiftReceived giftReceived = giftsReceivedRepository.findByExternalReference(externalReference).orElse(null);
+		if(giftReceived == null){
+			log.warn("The Mercado Pago webhook returned a payment that was not found in database | externalReference: {}", externalReference);
+			return;
+		} else {
+			log.info("The payment was found in the databse. Iniciating update");
+		}
 		BigDecimal amountPaid = null;
 		BigDecimal amountReceived = null;
-		if(mpPayment.getResults() != null && !mpPayment.getResults().isEmpty()) {
-			giftReceived.setStatus(PaymentStatus.fromMpValue(mpPayment.getResults().get(0).getStatus()));
+		try{
+			Assert.notEmpty(mpPayment.getResults(), "The property \"results\" is empty or null");
+			Assert.notNull(mpPayment.getResults().getFirst().getStatus(), "The property \"status\" is null");
 			
-			if(mpPayment.getResults().get(0).getTransactionDetails() != null) {
-				amountPaid = mpPayment.getResults().get(0).getTransactionDetails().getAmountPaid();
-				amountReceived = mpPayment.getResults().get(0).getTransactionDetails().getNetReceivedAmount();
-				
+			PaymentStatus mpStatus = PaymentStatus.fromMpValue(mpPayment.getResults().getFirst().getStatus());
+			if(mpStatus == giftReceived.getStatus()){
+				log.warn("The Mercado Pago webhook status and the persisted status are the same. Therefore, it will not be updated.");
+				return;
+			}
+			giftReceived.setStatus(mpStatus);
+
+			if (mpPayment.getResults().getFirst().getTransactionDetails() != null) {
+				amountPaid = mpPayment.getResults().getFirst().getTransactionDetails().getAmountPaid();
+				amountReceived = mpPayment.getResults().getFirst().getTransactionDetails().getNetReceivedAmount();
+
 				giftReceived.setAmountPaid(amountPaid);
 				giftReceived.setNetReceivedAmount(amountReceived);
 				giftReceived.setFeeAmount(amountPaid.subtract(amountReceived));
+				log.info("Payment was updated in the database.");
+			} else {
+				log.warn("Some information was not returned by Mercado Pago. Therefore, it will not be persisted in the database");
 			}
-		}
+		} catch (IllegalArgumentException e) {
+			log.warn("Payload does not match the expected format | Details: {} | Message: {}", e.getCause(), e.getMessage());
+			return;
+		}	
 	}
-	
-	public ResponseEntity<List<GiftItemDTO>> getGiftCatalog() {
-		List<GiftItemDTO> dto = giftsCatalogRepository.findAll().stream().map(giftMapper::toGiftDTO).toList();
-		return ResponseEntity.ok(dto);
-		
+
+	public List<GiftItemDTO> getGiftCatalog() {
+		try{
+			List<GiftItemDTO> dto = giftsCatalogRepository.findAll().stream().map(giftMapper::toGiftDTO).toList();
+			return dto;
+		} catch (Exception e) {
+			log.error("[ERROR ON GIFT CATALOG DATABASE CONSULT] Details: {} | Message: {} | Error: {}", e.getCause(), e.getMessage(), e);
+			throw new BusinessException(500, "Erro interno do servidor", "Erro ao consultar catálogo de presentes no banco de dados. Contacte o administrador.");
+		}
 	}
 }

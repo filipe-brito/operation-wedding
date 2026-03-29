@@ -1,14 +1,20 @@
 package com.operationwedding.backend.client;
 
+import java.util.List;
+
 import org.apache.commons.codec.digest.HmacUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,7 +26,9 @@ import com.operationwedding.backend.model.mapper.PaymentMapper;
 import com.operationwedding.backend.model.payload.MPFetchPaymentResponse;
 import com.operationwedding.backend.model.payload.MPOrderRequest;
 import com.operationwedding.backend.model.payload.MPProcessPaymentResponse;
+import com.operationwedding.backend.utils.LogUtils;
 
+import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
@@ -40,6 +48,8 @@ public class MercadoPagoClient {
 	@Autowired
 	private RestTemplate restTemplate;
 
+	private static final Logger log = LoggerFactory.getLogger(MercadoPagoClient.class);
+
 	public PaymentResponseDTO proccessMPPayment(MPOrderRequest requestBody, String idempotencyKey) {
 
 		HttpHeaders header = new HttpHeaders();
@@ -48,48 +58,83 @@ public class MercadoPagoClient {
 		header.setBearerAuth(mpToken);
 		HttpEntity<MPOrderRequest> httpEntity = new HttpEntity<>(requestBody, header);
 
+		String response = "";
 		try {
-			MPProcessPaymentResponse response = restTemplate
-					.postForEntity(paymentUrl, httpEntity, MPProcessPaymentResponse.class).getBody();
-			System.out.println("======RETORNO DO MERCADO PAGO======");
-			System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(response));
-			System.out.println("===================================");
+			log.info("[STARTING PAYMENT INTEGRATION WITH MERCADO PAGO] Idenpotency Key: {} Payload: {}", idempotencyKey,
+					LogUtils.mask(LogUtils.httpEntityToCurl(httpEntity, "POST", paymentUrl)));
+			response = restTemplate.postForEntity(
+					paymentUrl, httpEntity, String.class).getBody();
 
-			return PaymentMapper.toPaymentResponse(response);
+			MPProcessPaymentResponse mappedResponse = objectMapper.readValue(response, MPProcessPaymentResponse.class);
+
+			Assert.hasText(mappedResponse.getExternalReference(),
+					"Mercado Pago processou o pagamento, mas não devolveu a propriedade 'external_reference'");
+			Assert.notNull(mappedResponse.getTotalPaidAmount(),
+					"Mercado Pago processou o pagamento, mas não devolveu a propriedade 'total_paid_amount'");
+			Assert.notNull(mappedResponse.getTransactions(),
+					"Mercado Pago processou o pagamento, mas não devolveu a propriedade 'transactions'");
+
+			log.info("[MERCAGO PAGO PAYMENT RETURN] Status: {} Mercado Pago response: {}",
+					mappedResponse.getTransactions().getPayments().get(0).getStatusDetail(),
+					LogUtils.mask(objectMapper.writeValueAsString(mappedResponse)));
+
+			return PaymentMapper.toPaymentResponse(mappedResponse);
+		} catch (JacksonException e) {
+			log.error("[JSON DESSERIALIZATION ERROR] Mercado Pago Response: {}", LogUtils.mask(response));
+			throw new ResponseStatusException(HttpStatusCode.valueOf(500),
+					"Erro ao desserializar resposta do Mercado Pago. Acione o administrador para validar o status do pagamento.");
 		} catch (HttpStatusCodeException e) {
 			if (e.getStatusCode().is4xxClientError()) {
-				String jsonError = e.getResponseBodyAsString();
+				JsonNode jsonError = objectMapper.readTree(e.getResponseBodyAsString());
 
-				// 1. Lê o JSON como uma árvore de nós
-				JsonNode rootNode = objectMapper.readTree(jsonError);
+				String statusDetail = jsonError.at("/data/transactions/payments/0/status_detail").asString(null);
 
-				// 2. Tenta encontrar o nó "data". Se não existir, usa o rootNode (o próprio
-				// JSON)
-				JsonNode targetNode = rootNode.has("data") ? rootNode.get("data") : rootNode;
-				MPProcessPaymentResponse jsonConverted = objectMapper.treeToValue(targetNode,
-						MPProcessPaymentResponse.class);
-				throw new MPPaymentException(e.getStatusCode(), jsonConverted);
+				List<MPPaymentException.Error> errors = objectMapper.readerForListOf(MPPaymentException.Error.class).readValue(jsonError.path("errors"));
+
+
+				log.error("[MERCAGO PAGO PAYMENT RETURN] Status: {} Mercado Pago response: {}", e.getStatusCode(),
+						LogUtils.mask(e.getResponseBodyAsString()));
+
+				throw new MPPaymentException(e.getStatusCode(), statusDetail, "Mercado Pago retornou erro ao processar o pagamento.", errors);
 
 			} else {
-				throw new MPPaymentException(e.getStatusCode(), null);
+				log.error("[MERCAGO PAGO PAYMENT RETURN] Status: {} Mercado Pago response: {}", e.getStatusCode(),
+						LogUtils.mask(e.getResponseBodyAsString()));
+				throw new MPPaymentException(e.getStatusCode(), null, e.getMessage(), null);
 			}
-		}
+		} catch (IllegalArgumentException e) {
+			log.error("[JSON DESSERIALIZATION ERROR] Descripion: {} Mercado Pago Response: {}", e.getMessage(),
+					LogUtils.mask(response));
+			throw new MPPaymentException(HttpStatusCode.valueOf(500), null, 
+					"Erro ao desserializar resposta do Mercado Pago. Acione o administrador para validar o status do pagamento.", null);
+		} catch (Exception e) {
+			log.error("[UNEXPECTED_ERROR] Error detail: {} | Message: {}",
+					e.getClass().getSimpleName(), e.getMessage(), e);
 
+			throw new MPPaymentException(HttpStatusCode.valueOf(500), null, 
+					"Ocorreu um erro interno inesperado ao integrar com o Mercado Pago. Acione o administrador.", null);
+		}
 	}
 
 	public ResponseEntity<MPFetchPaymentResponse> fetchMPPayment(String externalReference) {
 		HttpHeaders header = new HttpHeaders();
 		header.setBearerAuth(mpToken);
 
-		HttpEntity<MPOrderRequest> httpEntity = new HttpEntity<>(header);
-
-		// O Spring propaga as exceções lançadas pelo MP
-		ResponseEntity<MPFetchPaymentResponse> mpResponse = restTemplate.exchange(fetchPaymentUrl + externalReference,
-				HttpMethod.GET, httpEntity, MPFetchPaymentResponse.class);
-		return mpResponse;
+		HttpEntity<Void> httpEntity = new HttpEntity<>(header);
+		log.info("Initiating payment consult on Mercado Pago | Request cURL: {}", LogUtils.httpEntityToCurl(httpEntity, "GET", fetchPaymentUrl + externalReference));
+		try{
+			ResponseEntity<MPFetchPaymentResponse> mpResponse = restTemplate.exchange(fetchPaymentUrl + externalReference,
+					HttpMethod.GET, httpEntity, MPFetchPaymentResponse.class);
+			log.info("Payment successfully validated on Mercado Pago | Mercado Pago response: {}", LogUtils.mask(objectMapper.writeValueAsString(mpResponse.getBody())));
+			return mpResponse;
+		} catch (HttpStatusCodeException e) {
+			log.error("Failure to verify payment on Mercado Pago | Details: {} | Message: {} | Response body: {}", e.getCause(), e.getMessage(), LogUtils.generalMask(e.getResponseBodyAsString()));
+			throw e;
+		}
 	}
 
-	public void MPPaymentValidation(String xSignature, String xRequestId, String dataId) {
+	public void mpPaymentValidation(String xSignature, String xRequestId, String dataId) {
+		log.info("Initiating integrity verification of payment signature");
 		String ts;
 		String v1;
 		try {
@@ -97,6 +142,7 @@ public class MercadoPagoClient {
 			ts = split[0].split("=")[1].trim();
 			v1 = split[1].split("=")[1].trim();
 		} catch (Exception e) {
+			log.error("Error on payment signature autentication | Details: {} Message: {} Error: {}", e.getCause(), e.getMessage());
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
 					"A assinatura do pagamento está com a estrutura inválida", null);
 		}
@@ -104,6 +150,7 @@ public class MercadoPagoClient {
 		long now = System.currentTimeMillis() / 1000;
 
 		if (Math.abs(now - Long.parseLong(ts)) > 300) {
+			log.error("Error on payment signature autentication | Details: Payment signature is expired");
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Assinatura do pagamento com validade vencida",
 					null);
 		}
@@ -113,7 +160,10 @@ public class MercadoPagoClient {
 		String cyphedSignature = new HmacUtils("HmacSHA256", mpSecretSignature).hmacHex(manifest);
 
 		if (!cyphedSignature.equalsIgnoreCase(v1)) {
+			log.error("Error on payment signature autentication | Details: The payment signature sent by Mercado Pago does not match the server's signature | v1 value: {}", v1);
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Assinatura do pagamento inválida", null);
 		}
+
+		log.info("Payment signature was successfully validated");
 	}
 }

@@ -18,7 +18,7 @@ import com.operationwedding.backend.model.payload.MPProcessPaymentResponse;
 
 public class PaymentMapper {
 
-	private static final Map<String, String> MESSAGES = new HashMap<>();
+	public static final Map<String, String> MESSAGES = new HashMap<>();
 
 	static {
 		// ================RETORNOS POR PIX=================
@@ -65,6 +65,7 @@ public class PaymentMapper {
 		BeanUtils.copyProperties(dto.getPayer(), payer);
 
 		MPOrderRequest request = new MPOrderRequest();
+		request.setExternalReference(dto.getExternalReference());
 		request.setTransactions(transaction);
 		request.setPayer(payer);
 
