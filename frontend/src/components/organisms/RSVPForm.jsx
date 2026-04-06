@@ -12,11 +12,11 @@ export const RSVPForm = ({ setIsLoading, setStatus, setErrorMessage }) => {
     control,
     watch,
     formState: { errors },
-    setValue
+    setValue,
   } = useForm();
 
   const willAttend = watch("will_attend");
-  const [ captchaToken, setCaptchaToken ] = useState(null);
+  const [captchaToken, setCaptchaToken] = useState(null);
 
   useEffect(() => {
     if (willAttend === "false") {
@@ -35,11 +35,11 @@ export const RSVPForm = ({ setIsLoading, setStatus, setErrorMessage }) => {
     try {
       setIsLoading(true);
       willAttend ? setStatus("will_attend") : setStatus("will_not_attend");
-      const response = await ConfirmAttendance(data);      
+      const response = await ConfirmAttendance(data);
       setIsLoading(false);
     } catch (error) {
       setErrorMessage(
-        error.response.data.detail ||
+        error.response.data.message ||
           "Ocorreu um erro inesperado. Por favor, tente novamente.",
       );
       setStatus("error");
@@ -249,12 +249,13 @@ export const RSVPForm = ({ setIsLoading, setStatus, setErrorMessage }) => {
           </div>
         </div>
 
-        <div className="flex justify-center my-4"> 
-          <Turnstile 
-          siteKey={import.meta.env.VITE_CLOUDFLARE_TURNSTILE_SITE_KEY} 
+        <div className="flex justify-center my-4">
+          <Turnstile
+            siteKey={import.meta.env.VITE_CLOUDFLARE_TURNSTILE_SITE_KEY}
             onSuccess={(token) => {
               console.log("A Cloudflare confirmou humanidade:", token);
-              setCaptchaToken(token)}}
+              setCaptchaToken(token);
+            }}
             onError={() => setCaptchaToken(null)}
             onExpire={() => setCaptchaToken(null)}
           />

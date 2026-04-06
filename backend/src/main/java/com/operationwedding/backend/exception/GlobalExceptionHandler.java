@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
 	// For general services exceptions
 	@ExceptionHandler(BusinessException.class)
 	public ResponseEntity<ProblemDetail> handleGenericException(BusinessException ex) {
-	    ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(ex.getStatus()), ex.getMessage());
+	    ProblemDetail problem = ProblemDetail.forStatus(HttpStatusCode.valueOf(ex.getStatus()));
 		problem.setTitle(ex.getErrorTitle());
 		problem.setProperty("message", ex.getMessage());
 	    return ResponseEntity.status(HttpStatus.valueOf(ex.getStatus())).body(problem);

@@ -11,12 +11,15 @@ import CheckoutPage from "../pages/CheckoutPage";
 import MainLayout from "../layouts/MainLayout";
 import RSVPPage from "../pages/RSVPPage";
 import TestPage from "../pages/TestPage";
+import ScrollToTop from "../utils/Utils";
 
 const AppRouter = () => {
   // AppRouter é uma arrow function
   return (
     // A função retorna um conjunto de rotas
     <Router>
+      <ScrollToTop />{" "}
+      {/* Componente para garantir que a página role para o topo ao navegar */}
       {/* Organiza o roteador (que define rotas na aplicação). É importado do react-router-dom */}
       <Routes>
         {/* Agrupamento de rotas que vamos definir */}

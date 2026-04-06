@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useLoading } from "@/context/LoadingContext"
+import { useLoading } from "@/context/LoadingContext";
 
 const MessagesPage = () => {
   const { setIsLoading } = useLoading();
@@ -24,7 +24,7 @@ const MessagesPage = () => {
   return (
     <div className="w-8/10 relative flex flex-col items-center px-5">
       <section className="w-full flex flex-col items-center text-[#99602b]">
-        <h1 className="font-[EmilysCandy] text-5xl mb-10">
+        <h1 className="font-[GreatVibes] text-5xl mb-10">
           Deixe sua mensagem de carinho para nós
         </h1>
         <p className="text-lg">

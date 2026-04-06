@@ -1,27 +1,117 @@
-import { HeaartIcon } from "../components/atoms/Icons";
+import { CoupleLogo, SectionDividerIcon } from "../components/atoms/Icons";
 import { CountdownTimer } from "../components/molecules/CountdownTimer";
+import { Carousel } from "../components/organisms/Carousel";
 
 const Home = () => {
-  return (
-    <div className="w-full relative flex flex-col items-center text-[#7E8C54] md:mt-10 mt-18">
-      <section className="flex flex-col items-center text-3xl gap-4 mb-10">
-        <div className="relative flex flex-col justify-center items-center">
-          <HeaartIcon className="text-[#E2725B]/70 h-50 w-50 animate-heartbeat animate-duration-1000 animate-iteration-count-infinite" />
-          <h1 className="absolute text-center font-[GreatVibes] text-8xl">
-            Amanda
-            <br className="md:hidden" />
-            <span className="text-4xl">&</span> Filipe
-          </h1>
-        </div>
+  const coupleImages = [
+    {
+      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1774961576/image_1_qekqwa.jpg",
+      caption_title: "OS NOIVOS DO SÉCULO",
+      caption_description:
+        "Amanda e Filipe, um amor que transcende o tempo e as eras.",
+    },
+    {
+      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1774961576/image_2_w1dpde.jpg",
+      caption_title: "OS NOIVOS DO SÉCULO",
+      caption_description:
+        "Amanda e Filipe, um amor que transcende o tempo e as eras.",
+      caption_position: "top-right",
+    },
+    {
+      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1774961576/image_3_afyz98.jpg",
+      caption_title: "OS NOIVOS DO SÉCULO",
+      caption_description:
+        "Amanda e Filipe, um amor que transcende o tempo e as eras.",
+    },
+    {
+      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1774961577/image_4_p9prlk.jpg",
+      caption_title: "OS NOIVOS DO SÉCULO",
+      caption_description:
+        "Amanda e Filipe, um amor que transcende o tempo e as eras.",
+    },
+    {
+      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1774961576/image_5_tlezdf.jpg",
+      caption_title: "OS NOIVOS DO SÉCULO",
+      caption_description:
+        "Amanda e Filipe, um amor que transcende o tempo e as eras.",
+    },
+    {
+      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1774961576/image_6_i0texv.jpg",
+      caption_title: "OS NOIVOS DO SÉCULO",
+      caption_description:
+        "Amanda e Filipe, um amor que transcende o tempo e as eras.",
+    },
+    {
+      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1774961576/image-7_brjwdo.jpg",
+      caption_title: "OS NOIVOS DO SÉCULO",
+      caption_description:
+        "Amanda e Filipe, um amor que transcende o tempo e as eras.",
+    },
+  ];
 
-        <img src="/main_logo.svg" alt="Logo Principal" className="h-12 w-12" />
-        <h2 className="font-[MarcellusSC]">18 / 10 / 2026</h2>
+  const weddingPartyImages = [
+    {
+      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1775152385/amanda_gewdcc.jpg",
+      caption_title: "Amanda",
+      caption_description: "irmã do noivo",
+      caption_position: "",
+    },
+    {
+      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1775152385/giovanna_wkvjyl.jpg",
+      caption_title: "Giovanna",
+      caption_description: "irmã do noivo",
+      caption_position: "bottom-right",
+    },
+    {
+      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1775152385/andre_yx9jeq.jpg",
+      caption_title: "André",
+      caption_description: "irmão do noivo",
+      caption_position: "",
+    },
+    {
+      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1775152385/ryan_mf4yll.jpg",
+      caption_title: "Ryan",
+      caption_description: "Primo do noivo",
+      caption_position: "bottom-right",
+    },
+    {
+      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1775152385/vinicius_erzbsv.jpg",
+      caption_title: "Vinicius",
+      caption_description: "Grande amigo do noivo",
+      caption_position: "",
+    },
+  ];
+
+  return (
+    <div className="w-full relative flex flex-col items-center text-[#7E8C54] md:mt-6 mt-10">
+      <section className="flex flex-col items-center text-3xl gap-4 mb-6">
+        <div className="relative flex flex-col justify-center items-center">
+          <h2 className="text-shadow-2xs font-[GreatVibes] text-6xl text-center">
+            Save the Date
+          </h2>
+          <CoupleLogo className="w-86 h-86" />
+        </div>
       </section>
-      <section className="w-full flex flex-col items-center">
-        <h2 className="font-[GreatVibes] text-2xl mb-6 text-[#7E8C54] text-nowrap">
+      <SectionDividerIcon className="w-40 my-20 opacity-70" />
+      <section className="w-full flex flex-col items-center mb-10 px-6">
+        <h2 className="font-[GreatVibes] text-5xl text-center mb-6 text-[#7E8C54]">
           Contagem Regressiva para o Grande Dia
         </h2>
         <CountdownTimer />
+      </section>
+      <SectionDividerIcon className="w-40 my-20 opacity-70" />
+      <section className="bg-[#7e8c54]/60 py-6 timeline-view animate-blurred-fade-in animate-range-[entry_10%_contain_30%]">
+        <h2 className="text-shadow-2xs font-[GreatVibes] text-6xl text-center mb-6 text-white">
+          Os Noivos
+        </h2>
+        <Carousel images={coupleImages} />
+      </section>
+      <SectionDividerIcon className="w-40 my-20 opacity-70" />
+      <section className="bg-[#7e8c54]/60 py-6 timeline-view animate-blurred-fade-in animate-range-[entry_10%_contain_30%]">
+        <h2 className="text-shadow-2xs font-[GreatVibes] text-6xl text-center mb-6 text-white">
+          Os Padrinhos
+        </h2>
+        <Carousel images={weddingPartyImages} />
       </section>
     </div>
   );

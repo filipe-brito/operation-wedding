@@ -1,11 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useLoading } from "@/context/LoadingContext";
-import "./LoadingModal.css";
+import "./CoupleLogo.css";
 
-const LoadingModal = () => {
-  // 1. Buscamos o estado lá do contexto
-  const { isLoading } = useLoading();
-
+const CoupleLogo = () => {
   return (
     <AnimatePresence>
       {/* 2. A condição DEVE estar dentro do AnimatePresence */}
@@ -18,7 +15,7 @@ const LoadingModal = () => {
           // Estado quando o React tenta removê-lo (fade out)
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
-          className="flex flex-col fixed inset-0 z-60 bg-[#FCFBF6] justify-center items-center w-full h-full"
+          className="fixed inset-0 z-60 bg-[#FCFBF6] flex justify-center items-center"
         >
           {/* Seu SVG com as animações de CSS aqui */}
           <svg
@@ -61,14 +58,10 @@ const LoadingModal = () => {
               />
             </g>
           </svg>
-
-          <h2 className="text-2xl text-center font-[Oswald]">
-            Calma! Os noivos estão se decidindo quais fotos mostrar.
-          </h2>
         </motion.div>
       )}
     </AnimatePresence>
   );
 };
 
-export default LoadingModal;
+export default CoupleLogo;

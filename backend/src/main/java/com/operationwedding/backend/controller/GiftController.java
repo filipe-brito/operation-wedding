@@ -51,16 +51,8 @@ public class GiftController {
 		MDC.put("trace_id", paymentDTO.getExternalReference());
 		MDC.put("process_name", "PAYMENT_PROCESS");
 		String clientIp = request.getRemoteAddr();
-		if(log.isDebugEnabled()){
-			log.debug("[PAYMENT REQUEST RECEIVED] Payload request: {}", objectMapper.writeValueAsString(paymentDTO));
-		}
 		
-		log.info(
-			"[PAYMENT REQUEST RECEIVED] Client IP: {} | Payer name: {} | Payment method: {}", 
-			clientIp, 
-			paymentDTO.getDonorName(), 
-			paymentDTO.getPaymentMethodId()
-		);
+		log.info("[PAYMENT REQUEST RECEIVED] Payload request: {}", objectMapper.writeValueAsString(paymentDTO));
 		boolean isHuman = tService.isHuman(paymentDTO.getCaptchaToken(), clientIp);
 		if(!isHuman) {
 			log.warn("[HUMANITY TEST] Result: FAILED");

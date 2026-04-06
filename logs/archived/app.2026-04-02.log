@@ -1,0 +1,44 @@
+2026-04-02 11:30:02 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m c.o.backend.BackendApplication       - Starting BackendApplication using Java 21.0.6 with PID 22643 (/var/www/operation-wedding/backend/target/classes started by filipe in /var/www/operation-wedding)
+2026-04-02 11:30:02 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m c.o.backend.BackendApplication       - No active profile set, falling back to 1 default profile: "default"
+2026-04-02 11:30:02 [background-preinit] [] [1;32m[]                  [0;39m [34mINFO [0;39m o.h.validator.internal.util.Version  - HV000001: Hibernate Validator 9.0.1.Final
+2026-04-02 11:30:02 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-02 11:30:02 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 52 ms. Found 3 JPA repository interfaces.
+2026-04-02 11:30:03 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m o.s.boot.tomcat.TomcatWebServer      - Tomcat initialized with port 8081 (http)
+2026-04-02 11:30:03 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m o.a.coyote.http11.Http11NioProtocol  - Initializing ProtocolHandler ["http-nio-8081"]
+2026-04-02 11:30:03 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m o.a.catalina.core.StandardService    - Starting service [Tomcat]
+2026-04-02 11:30:03 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m o.a.catalina.core.StandardEngine     - Starting Servlet engine: [Apache Tomcat/11.0.15]
+2026-04-02 11:30:03 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1367 ms
+2026-04-02 11:30:03 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m org.hibernate.orm.jpa                - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-02 11:30:03 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m org.hibernate.orm.core               - HHH000001: Hibernate ORM core version 7.2.1.Final
+2026-04-02 11:30:04 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m o.s.o.j.p.SpringPersistenceUnitInfo  - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-02 11:30:04 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m com.zaxxer.hikari.HikariDataSource   - HikariPool-1 - Starting...
+2026-04-02 11:30:04 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m com.zaxxer.hikari.pool.HikariPool    - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1031c1a0
+2026-04-02 11:30:04 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m com.zaxxer.hikari.HikariDataSource   - HikariPool-1 - Start completed.
+2026-04-02 11:30:04 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m o.hibernate.orm.connections.pooling  - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/operation_wedding_db_homolog]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 15.12
+	Default catalog/schema: operation_wedding_db_homolog/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-02 11:30:05 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m org.hibernate.orm.core               - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-02 11:30:05 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-02 11:30:06 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m o.s.d.j.r.q.QueryEnhancerFactories   - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-02 11:30:06 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m org.flywaydb.core.FlywayExecutor     - Database: jdbc:postgresql://localhost:5432/operation_wedding_db_homolog (PostgreSQL 15.12)
+2026-04-02 11:30:06 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m o.f.core.internal.command.DbValidate - Successfully validated 1 migration (execution time 00:00.029s)
+2026-04-02 11:30:06 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m o.f.core.internal.command.DbMigrate  - Current version of schema "public": 1
+2026-04-02 11:30:06 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m o.f.core.internal.command.DbMigrate  - Schema "public" is up to date. No migration necessary.
+2026-04-02 11:30:06 [main] [] [1;32m[]                  [0;39m [31mWARN [0;39m o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-02 11:30:06 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m o.a.coyote.http11.Http11NioProtocol  - Starting ProtocolHandler ["http-nio-8081"]
+2026-04-02 11:30:06 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m o.s.boot.tomcat.TomcatWebServer      - Tomcat started on port 8081 (http) with context path '/'
+2026-04-02 11:30:06 [main] [] [1;32m[]                  [0;39m [34mINFO [0;39m c.o.backend.BackendApplication       - Started BackendApplication in 5.486 seconds (process running for 5.868)
+2026-04-02 11:32:43 [SpringApplicationShutdownHook] [] [1;32m[]                  [0;39m [34mINFO [0;39m o.s.boot.tomcat.GracefulShutdown     - Commencing graceful shutdown. Waiting for active requests to complete
+2026-04-02 11:32:43 [tomcat-shutdown] [] [1;32m[]                  [0;39m [34mINFO [0;39m o.s.boot.tomcat.GracefulShutdown     - Graceful shutdown complete
+2026-04-02 11:32:43 [SpringApplicationShutdownHook] [] [1;32m[]                  [0;39m [34mINFO [0;39m o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-02 11:32:43 [SpringApplicationShutdownHook] [] [1;32m[]                  [0;39m [34mINFO [0;39m com.zaxxer.hikari.HikariDataSource   - HikariPool-1 - Shutdown initiated...
+2026-04-02 11:32:43 [SpringApplicationShutdownHook] [] [1;32m[]                  [0;39m [34mINFO [0;39m com.zaxxer.hikari.HikariDataSource   - HikariPool-1 - Shutdown completed.
