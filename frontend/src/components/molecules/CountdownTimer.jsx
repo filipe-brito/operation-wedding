@@ -49,17 +49,17 @@ export const CountdownTimer = () => {
 
   return (
     <div className="text-center text-white p-2">
-      <div className="md:flex grid grid-cols-2 justify-center gap-2">
+      <div className="md:flex grid grid-cols-2 justify-center gap-6">
         {/* Bloco de Dias */}
-        <div className="">
-          <h2 className="bg-[#7E8C54] text-5xl font-bold p-4 shadow-xl rounded-lg">
+        <div className="w-30">
+          <h2 className="bg-[#7E8C54] text-5xl p-4 shadow-xl rounded-lg">
             {timeRemaining.days}
           </h2>
           <h3 className="text-lg text-[#7E8C54] font-bold mt-2">DIAS</h3>
         </div>
 
         {/* Bloco de Horas */}
-        <div className="">
+        <div className="w-30">
           <h2 className="bg-[#7E8C54] text-5xl p-4 shadow-xl rounded-lg">
             {timeRemaining.hours.toString().padStart(2, "0")}{" "}
             {/* Garante 0 à esquerda */}
@@ -68,7 +68,7 @@ export const CountdownTimer = () => {
         </div>
 
         {/* Bloco de Minutos */}
-        <div className="">
+        <div className="w-30">
           <h2 className="bg-[#7E8C54] text-5xl p-4 shadow-xl rounded-lg">
             {timeRemaining.minutes.toString().padStart(2, "0")}
           </h2>
@@ -76,7 +76,7 @@ export const CountdownTimer = () => {
         </div>
 
         {/* Bloco de Segundos */}
-        <div className=" block">
+        <div className="w-30 block">
           {" "}
           {/* Oculta em telas muito pequenas */}
           <h2

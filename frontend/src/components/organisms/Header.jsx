@@ -9,7 +9,7 @@ export const Header = () => {
   const optionsPaginas = [
     {
       name: "homePage",
-      value: <h2>Pagina Incial</h2>,
+      value: <h2>Pagina Inicial</h2>,
       optionStyle:
         "cursor-pointer pl-4 py-2 rounded-t-md transition duration-300 hover:bg-[#7E8C54]/15",
       link: "/home",
@@ -84,13 +84,13 @@ export const Header = () => {
   };
 
   return (
-    <header className="font-[Reboto] text-[#7E8C54] text-sm tracking-widest font-normal md:h-[15dvh] top-0 w-full fixed justify-center items-center bg-[#FCFBF6] border-b border-[#5a461a]/30 z-50">
+    <header className="h-[10dvh] md:h-[15dvh] font-[Reboto] text-[#7E8C54] text-sm tracking-widest font-normal md:h-[15dvh] top-0 w-full fixed justify-center items-center bg-[#FCFBF6] border-b border-[#5a461a]/30 z-50">
       <div className="w-8/10 flex items-center mx-auto h-full">
         <h1 className="flex items-center gap-4 font-[GreatVibes] text-2xl">
           <img
-            src="/main_logo.svg"
+            src="/couple-main-logo.svg"
             alt="Logo Principal"
-            className="h-20 w-20"
+            className="md:w-50 w-30"
           />
         </h1>
         <button

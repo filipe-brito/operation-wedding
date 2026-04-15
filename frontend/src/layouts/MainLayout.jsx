@@ -16,8 +16,8 @@ const MainLayout = () => {
   return (
     <div className="font-[JosefinSans] text-xs md:min-h-screen md:w-full bg-[#FCFBF6]">
       <LoadingModal />
-      <Header className="fixed w-full" />
-      <main className="flex justify-center my-[10dvh] md:my-[15dvh] md:pt-4">
+      <Header />
+      <main className="flex justify-center mt-[10dvh] md:mt-[15dvh] md:min-h-[75dvh] min-h-[70dvh]">
         <Outlet />
         {/* O Carrinho e o Botão ficam "vigiando" o layout inteiro */}
         {!isCheckoutPage && (

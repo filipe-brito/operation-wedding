@@ -1,8 +1,16 @@
-import { CoupleLogo, SectionDividerIcon } from "../components/atoms/Icons";
+import { Button1 } from "../components/atoms/Button1";
+import {
+  SectionDividerIcon,
+  CalendarIcon,
+  GiftIcon,
+} from "../components/atoms/Icons";
 import { CountdownTimer } from "../components/molecules/CountdownTimer";
 import { Carousel } from "../components/organisms/Carousel";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate(); // Hook para navegação
+
   const coupleImages = [
     {
       url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1774961576/image_1_qekqwa.jpg",
@@ -83,35 +91,68 @@ const Home = () => {
   ];
 
   return (
-    <div className="w-full relative flex flex-col items-center text-[#7E8C54] md:mt-6 mt-10">
-      <section className="flex flex-col items-center text-3xl gap-4 mb-6">
-        <div className="relative flex flex-col justify-center items-center">
-          <h2 className="text-shadow-2xs font-[GreatVibes] text-6xl text-center">
-            Save the Date
-          </h2>
-          <CoupleLogo className="w-86 h-86" />
-        </div>
+    <div className="w-full relative flex flex-col items-center text-[#7E8C54]">
+      <section className="h-[90dvh] md:h-[85dvh] flex flex-col items-center justify-center text-3xl w-full gap-4 bg-blend-overlay bg-white/30 bg-[url('/home_background_new.png')] bg-no-repeat bg-center bg-cover">
+        <img src="/home_logo.svg" alt="Logo dos noivos" className="size-full" />
       </section>
       <SectionDividerIcon className="w-40 my-20 opacity-70" />
       <section className="w-full flex flex-col items-center mb-10 px-6">
-        <h2 className="font-[GreatVibes] text-5xl text-center mb-6 text-[#7E8C54]">
+        <h2 className="font-[MarcellusSC] text-5xl text-center mb-6 text-[#7E8C54]">
           Contagem Regressiva para o Grande Dia
         </h2>
         <CountdownTimer />
       </section>
       <SectionDividerIcon className="w-40 my-20 opacity-70" />
-      <section className="bg-[#7e8c54]/60 py-6 timeline-view animate-blurred-fade-in animate-range-[entry_10%_contain_30%]">
-        <h2 className="text-shadow-2xs font-[GreatVibes] text-6xl text-center mb-6 text-white">
+      <section className="bg-blend-overlay bg-white/30 bg-[url('/carousel_background.png')] bg-no-repeat bg-center bg-cover py-6">
+        <h2 className="text-shadow-2xs font-[Qwitcher] text-8xl text-center text-black">
           Os Noivos
         </h2>
         <Carousel images={coupleImages} />
       </section>
       <SectionDividerIcon className="w-40 my-20 opacity-70" />
-      <section className="bg-[#7e8c54]/60 py-6 timeline-view animate-blurred-fade-in animate-range-[entry_10%_contain_30%]">
-        <h2 className="text-shadow-2xs font-[GreatVibes] text-6xl text-center mb-6 text-white">
+      <section className="bg-blend-overlay bg-white/30 bg-[url('/carousel_background.png')] bg-no-repeat bg-center bg-cover py-6">
+        <h2 className="text-shadow-2xs font-[Qwitcher] text-8xl text-center text-black">
           Os Padrinhos
         </h2>
         <Carousel images={weddingPartyImages} />
+      </section>
+      <SectionDividerIcon className="w-40 my-20 opacity-70" />
+      <section className="text-white flex flex-col justify-center items-center">
+        <div className="w-full flex flex-col justify-center items-center bg-[#7E8C54] mb-10 py-10">
+          <h2 className="text-4xl text-center mb-10">
+            A gente se ama, o lugar é bonito e as bedidas estarão no ponto. Só
+            falta você dizer que vem para a gente colocar seu nome na lista do
+            maior evento do século!
+          </h2>
+          <Button1
+            onClick={() => navigate("/rsvp")}
+            className="w-80"
+            label={
+              <>
+                <CalendarIcon className="text-[#e2725b] scale-300" />
+                CONFIRME SUA PRESENÇA
+              </>
+            }
+          />
+        </div>
+        <img src="/couple-celebrating.svg" alt="" className="size-60" />
+      </section>
+      <SectionDividerIcon className="w-40 my-20 opacity-70" />
+      <section className=" w-full bg-[#7E8C54] text-white flex flex-col items-center mb-10 py-10">
+        <h2 className="text-4xl text-center mb-10">
+          Faça parte da nossa história e confirme sua presença no maior evento
+          do século!
+        </h2>
+        <Button1
+          onClick={() => navigate("/gifts")}
+          className="w-80"
+          label={
+            <>
+              <GiftIcon className="text-[#e2725b] size-40" />
+              COMPRAR PRESENTE PARA OS NOIVOS
+            </>
+          }
+        />
       </section>
     </div>
   );

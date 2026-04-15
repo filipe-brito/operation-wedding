@@ -22,13 +22,13 @@ export const Carousel = ({ images }) => {
   return (
     <div className="w-full relative flex flex-col items-center">
       <button
-        className="absolute top-1/2 left-4 z-10 md:bg-white rounded-full p-1 md:shadow-xl md:opacity-60 md:hover:opacity-100 md:transition md:duration-400 md:animate-none animate-horizontal-bounce animate-iteration-count-infinite animate-duration-2000"
+        className="absolute top-1/2 left-4 z-10 md:bg-white rounded-full p-1 md:shadow-xl md:opacity-60 md:hover:opacity-100 md:transition md:duration-400"
         onClick={() => emblaApi?.scrollPrev()}
       >
         <ArrowLeftIcon className="w-10 h-10" />
       </button>
       <button
-        className="absolute top-1/2 right-4 z-10 md:bg-white rounded-full p-1 md:shadow-xl md:opacity-60 md:hover:opacity-100 md:transition md:duration-400 md:animate-none animate-horizontal-bounce animate-iteration-count-infinite animate-duration-2000"
+        className="absolute top-1/2 right-4 z-10 md:bg-white rounded-full p-1 md:shadow-xl md:opacity-60 md:hover:opacity-100 md:transition md:duration-400"
         onClick={() => emblaApi?.scrollNext()}
       >
         <ArrowRightIcon className="w-10 h-10" />
@@ -42,7 +42,7 @@ export const Carousel = ({ images }) => {
                   <img
                     loading="lazy"
                     src={image.url}
-                    className="relative object-contain md:opacity-70 md:hover:opacity-100 transition-opacity duration-300 mask-y-from-80% mask-y-to-99% md:max-h-[85dvh]"
+                    className="relative object-contain md:max-h-[85dvh] border-8"
                   />
                   <figcaption
                     className={`absolute max-w-1/2 flex flex-col bg-[#5a741a] animate-jiggle animate-duration-3000 animate-iteration-count-infinite ${captionPositions(image.caption_position)}`}

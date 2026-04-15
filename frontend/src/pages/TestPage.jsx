@@ -1,3 +1,4 @@
+import { Button1 } from "../components/atoms/Button1";
 import LoadingModal from "../components/atoms/LoadingModal";
 
 const TestPage = () => {
@@ -30,6 +31,7 @@ const TestPage = () => {
           <h2>Rebolto</h2>
           <p>Texto digitado em Rebolto</p>
         </div>
+        <img src="/logo-animated.svg" alt="" />
       </div>
     </>
   );

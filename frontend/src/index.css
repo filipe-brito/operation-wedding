@@ -64,6 +64,16 @@
   src: url("/fonts/Reboto/Roboto-VariableFont_wdth,wght.ttf") format("truetype");
 }
 
+/* Carregamento da fonte Qwitcher */
+@font-face {
+  font-family: "Qwitcher";
+  font-style: normal;
+  font-weight: 400; /* intervalo de pesos suportados */
+  font-display: swap; /* Importante para performance */
+  src: url("/fonts/Qwitcher_Grypen/QwitcherGrypen-Regular.ttf")
+    format("truetype");
+}
+
 /* ESTENDENDO O TEMA PARA INCLUIR A FONTE JOSEFIN */
 @theme {
   /* Isso cria a classe Tailwind 'font-josefin' */
@@ -98,6 +108,11 @@
   --font-reboto: "Reboto", system-ui, sans-serif;
 }
 
+@theme {
+  /* Isso cria a classe Tailwind 'font-greatvibes' */
+  --font-qwitcher: "Qwitcher", system-ui, sans-serif;
+}
+
 @layer base {
   :root {
     /* Fontes e Renderização (Boas Práticas) */
@@ -113,7 +128,8 @@
     color-scheme: light;
   }
 
-  html, body {
+  html,
+  body {
     /* Aplica as cores padrão usando Tailwind */
     /* Isso garante que o fundo seja sempre branco (ou a cor que você escolher) */
     @apply m-0 p-0 w-full min-h-full bg-[#FCFBF6] text-slate-900;
@@ -135,5 +151,3 @@
     @apply opacity-0 translate-y-20 transition-all duration-200 ease-in;
   }
 }
-
-
