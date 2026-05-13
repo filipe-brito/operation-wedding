@@ -18,7 +18,7 @@ const LoadingModal = () => {
           // Estado quando o React tenta removê-lo (fade out)
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5 }}
-          className="flex flex-col fixed inset-0 z-60 bg-[#FCFBF6] justify-center items-center w-full h-full"
+          className="flex flex-col fixed inset-0 z-3 bg-[#FCFBF6] justify-center items-center w-full h-full"
         >
           <img src="/logo-animated.svg" alt="Logo dos noivos animada" />
 

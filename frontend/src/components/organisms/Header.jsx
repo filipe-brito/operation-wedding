@@ -1,7 +1,17 @@
 import { DropdownButton } from "../molecules/DropdownButton.jsx";
-import { CancelIcon, DownArrowIcon, MenuIcon } from "../atoms/Icons.jsx";
+import {
+  CancelIcon,
+  CoupleIcon,
+  DownArrowIcon,
+  GiftIcon,
+  GiftIcon2,
+  HomeIcon,
+  MenuIcon,
+  SuccessIcon,
+} from "../atoms/Icons";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { MenuButton } from "../atoms/MenuButton";
 
 export const Header = () => {
   const [activeMenu, setActiveMenu] = useState(false);
@@ -58,7 +68,7 @@ export const Header = () => {
 
   const NavOptionsMobile = () => {
     return (
-      <nav className="md:hidden text-[#FCFBF6] animate-fade-in-left animate-duration-normal absolute top-full min-h-screen bg-[#7E8C54] w-full p-10 h-full items-center justify-end">
+      <nav className="md:hidden text-[#FCFBF6] bg-[#7E8C54] animate-fade-in-left animate-duration-normal absolute top-full min-h-screen w-full p-10 h-full items-center justify-end">
         <ul className="flex flex-col gap-8 font-regular">
           <li className="flex font-bold">PÁGINAS</li>
           {optionsPaginas.map((option) => (
@@ -84,7 +94,7 @@ export const Header = () => {
   };
 
   return (
-    <header className="h-[10dvh] md:h-[15dvh] font-[Reboto] text-[#7E8C54] text-sm tracking-widest font-normal md:h-[15dvh] top-0 w-full fixed justify-center items-center bg-[#FCFBF6] border-b border-[#5a461a]/30 z-50">
+    <header className="h-[10dvh] md:h-[15dvh] font-[Reboto] text-[#7E8C54] text-sm tracking-widest font-normal md:h-[15dvh] top-0 w-full fixed justify-center items-center bg-[#ede9e6] border-b border-[#5a461a]/30 z-50">
       <div className="w-8/10 flex items-center mx-auto h-full">
         <h1 className="flex items-center gap-4 font-[GreatVibes] text-2xl">
           <img
@@ -107,5 +117,88 @@ export const Header = () => {
       </div>
       {activeMenu && <NavOptionsMobile />}
     </header>
+  );
+};
+
+const NavOptions = ({ activeMenu, setActiveMenu }) => {
+  return (
+    <nav
+      className={`left-0 top-0 z-1 fixed h-full w-[100dvw] bg-white transition-all duration-500  ${activeMenu ? "translate-x-[20%] visible" : "translate-x-full invisible"}`}
+    >
+      <ul className="flex flex-col w-fit p-2 text-nowrap divide-y-1 divide-gray-300">
+        <li>
+          <a
+            href="#home"
+            className="flex items-center gap-2 p-4"
+            onClick={() => setActiveMenu(false)}
+          >
+            <HomeIcon className="size-8" /> Página inicial
+          </a>
+        </li>
+        <li>
+          <a
+            href="#nossa-historia"
+            className="flex items-center gap-2 p-4"
+            onClick={() => setActiveMenu(false)}
+          >
+            <CoupleIcon className="size-10" />
+            Nossa história
+          </a>
+        </li>
+        <li>
+          <a
+            href="#rsvp"
+            className="flex items-center gap-2 p-4"
+            onClick={() => setActiveMenu(false)}
+          >
+            <SuccessIcon className="size-10" />
+            Confirme sua presença
+          </a>
+        </li>
+        <li>
+          <a
+            href="#gifts"
+            className="flex items-center gap-2 p-4"
+            onClick={() => setActiveMenu(false)}
+          >
+            <GiftIcon2 className="size-10" />
+            Comprar presentes
+          </a>
+        </li>
+      </ul>
+    </nav>
+  );
+};
+
+export const Header2 = () => {
+  const [activeMenu, setActiveMenu] = useState(false);
+  const [isOnTop, setIsOnTop] = useState(true);
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+
+      if (scrollY < 500) {
+        setIsOnTop(true);
+      } else {
+        setIsOnTop(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  });
+
+  return (
+    <>
+      <header className="z-2 fixed flex top-4 right-4">
+        <MenuButton
+          switcher={activeMenu}
+          setSwitcher={setActiveMenu}
+          isOnTop={isOnTop}
+        />
+      </header>
+      <NavOptions activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
+    </>
   );
 };

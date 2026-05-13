@@ -6,6 +6,7 @@ import CartDrawer from "../components/organisms/CartDrawer";
 import { useLocation } from "react-router-dom";
 import LoadingModal from "../components/atoms/LoadingModal";
 import { Footer } from "../components/organisms/Footer";
+import { Header2 } from "../components/organisms/Header";
 
 const MainLayout = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -14,12 +15,13 @@ const MainLayout = () => {
   const isCheckoutPage = location.pathname === "/checkout";
 
   return (
-    <div className="font-[JosefinSans] text-xs md:min-h-screen md:w-full bg-[#FCFBF6]">
+    <div className="font-[JosefinSans] text-xs md:w-full bg-[#ede9e6]">
       <LoadingModal />
-      <Header />
-      <main className="flex justify-center mt-[10dvh] md:mt-[15dvh] md:min-h-[75dvh] min-h-[70dvh]">
+      {/*<Header />{" "}*/}
+      <Header2 />
+      {/* Mesmo sendo interno da div principal, ele não ocupa espaço nela, ele ocupa espaço na root.*/}
+      <main className="flex justify-center">
         <Outlet />
-        {/* O Carrinho e o Botão ficam "vigiando" o layout inteiro */}
         {!isCheckoutPage && (
           <>
             <CartFloatingButton onClick={() => setIsCartOpen(true)} />
@@ -30,7 +32,6 @@ const MainLayout = () => {
           </>
         )}
       </main>
-      <Footer className="w-full h-full" />
     </div>
   );
 };

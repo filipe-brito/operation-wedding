@@ -1,161 +1,107 @@
+import { useState, useEffect, useRef } from "react";
 import { Button1 } from "../components/atoms/Button1";
 import {
-  SectionDividerIcon,
   CalendarIcon,
   GiftIcon,
+  Frame1,
+  HeartIcon,
+  CinemaChairIcon,
 } from "../components/atoms/Icons";
 import { CountdownTimer } from "../components/molecules/CountdownTimer";
 import { Carousel } from "../components/organisms/Carousel";
 import { useNavigate } from "react-router-dom";
+import "@/styles/general-styles.css";
+import { Footer } from "../components/organisms/Footer";
+import { ImageFrame, ImageFrame3 } from "../components/atoms/ImageFrame";
+import { Header2 } from "../components/organisms/Header";
+import { HomeNavigation } from "../components/molecules/HomeNavigation";
+import { HomeCoupleSection } from "../components/organisms/HomeCoupleSection";
+import { HomePartySection } from "../components/organisms/HomePartySection";
+import { HomeRSVPSection } from "../components/organisms/HomeRSVPSection";
+import { HomeGiftsSection } from "../components/organisms/HomeGiftsSection";
+import { HomeHeroSection } from "../components/organisms/HomeHeroSection";
+import { HomeAboutSection } from "../components/organisms/HomeAboutSection";
 
 const Home = () => {
-  const navigate = useNavigate(); // Hook para navegação
+  const [isVisible, setIsVisible] = useState(true);
+  const timerRef = useRef(null);
 
-  const coupleImages = [
-    {
-      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1774961576/image_1_qekqwa.jpg",
-      caption_title: "OS NOIVOS DO SÉCULO",
-      caption_description:
-        "Amanda e Filipe, um amor que transcende o tempo e as eras.",
-    },
-    {
-      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1774961576/image_2_w1dpde.jpg",
-      caption_title: "OS NOIVOS DO SÉCULO",
-      caption_description:
-        "Amanda e Filipe, um amor que transcende o tempo e as eras.",
-      caption_position: "top-right",
-    },
-    {
-      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1774961576/image_3_afyz98.jpg",
-      caption_title: "OS NOIVOS DO SÉCULO",
-      caption_description:
-        "Amanda e Filipe, um amor que transcende o tempo e as eras.",
-    },
-    {
-      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1774961577/image_4_p9prlk.jpg",
-      caption_title: "OS NOIVOS DO SÉCULO",
-      caption_description:
-        "Amanda e Filipe, um amor que transcende o tempo e as eras.",
-    },
-    {
-      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1774961576/image_5_tlezdf.jpg",
-      caption_title: "OS NOIVOS DO SÉCULO",
-      caption_description:
-        "Amanda e Filipe, um amor que transcende o tempo e as eras.",
-    },
-    {
-      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1774961576/image_6_i0texv.jpg",
-      caption_title: "OS NOIVOS DO SÉCULO",
-      caption_description:
-        "Amanda e Filipe, um amor que transcende o tempo e as eras.",
-    },
-    {
-      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1774961576/image-7_brjwdo.jpg",
-      caption_title: "OS NOIVOS DO SÉCULO",
-      caption_description:
-        "Amanda e Filipe, um amor que transcende o tempo e as eras.",
-    },
-  ];
+  const showNavTemporarily = () => {
+    setIsVisible(true);
 
-  const weddingPartyImages = [
-    {
-      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1775152385/amanda_gewdcc.jpg",
-      caption_title: "Amanda",
-      caption_description: "irmã do noivo",
-      caption_position: "",
-    },
-    {
-      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1775152385/giovanna_wkvjyl.jpg",
-      caption_title: "Giovanna",
-      caption_description: "irmã do noivo",
-      caption_position: "bottom-right",
-    },
-    {
-      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1775152385/andre_yx9jeq.jpg",
-      caption_title: "André",
-      caption_description: "irmão do noivo",
-      caption_position: "",
-    },
-    {
-      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1775152385/ryan_mf4yll.jpg",
-      caption_title: "Ryan",
-      caption_description: "Primo do noivo",
-      caption_position: "bottom-right",
-    },
-    {
-      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1775152385/vinicius_erzbsv.jpg",
-      caption_title: "Vinicius",
-      caption_description: "Grande amigo do noivo",
-      caption_position: "",
-    },
-  ];
+    if (timerRef.current) clearTimeout(timerRef.current);
+
+    timerRef.current = setTimeout(() => {
+      setIsVisible(false);
+    }, 1600);
+  };
+
+  useEffect(() => {
+    showNavTemporarily();
+
+    window.addEventListener("scroll", showNavTemporarily, true);
+
+    return () => {
+      window.removeEventListener("scroll", showNavTemporarily, true);
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
+
+  const activeSection = useActiveSection(["hero", "about", "rsvp", "gifts"]);
 
   return (
-    <div className="w-full relative flex flex-col items-center text-[#7E8C54]">
-      <section className="h-[90dvh] md:h-[85dvh] flex flex-col items-center justify-center text-3xl w-full gap-4 bg-blend-overlay bg-white/30 bg-[url('/home_background_new.png')] bg-no-repeat bg-center bg-cover">
-        <img src="/home_logo.svg" alt="Logo dos noivos" className="size-full" />
+    <div className="w-full flex flex-col items-center text-[#7E8C54] overflow-hidden">
+      <HomeNavigation activeSection={activeSection} isVisible={isVisible} />
+
+      <HomeHeroSection />
+
+      <HomeAboutSection />
+
+      <HomeCoupleSection />
+      <section className="home-sections-style w-full grid grid-cols-1 place-items-center md:grid-cols-2 md:grid-rows-1">
+        <HomePartySection />
       </section>
-      <SectionDividerIcon className="w-40 my-20 opacity-70" />
-      <section className="w-full flex flex-col items-center mb-10 px-6">
-        <h2 className="font-[MarcellusSC] text-5xl text-center mb-6 text-[#7E8C54]">
-          Contagem Regressiva para o Grande Dia
-        </h2>
-        <CountdownTimer />
+      <section
+        id="rsvp"
+        className="home-sections-style flex flex-col items-center"
+      >
+        <HomeRSVPSection />
       </section>
-      <SectionDividerIcon className="w-40 my-20 opacity-70" />
-      <section className="bg-blend-overlay bg-white/30 bg-[url('/carousel_background.png')] bg-no-repeat bg-center bg-cover py-6">
-        <h2 className="text-shadow-2xs font-[Qwitcher] text-8xl text-center text-black">
-          Os Noivos
-        </h2>
-        <Carousel images={coupleImages} />
+      <section
+        id="gifts"
+        className="home-sections-style bg-[#7E8C54] text-white flex flex-col items-center py-10"
+      >
+        <HomeGiftsSection />
       </section>
-      <SectionDividerIcon className="w-40 my-20 opacity-70" />
-      <section className="bg-blend-overlay bg-white/30 bg-[url('/carousel_background.png')] bg-no-repeat bg-center bg-cover py-6">
-        <h2 className="text-shadow-2xs font-[Qwitcher] text-8xl text-center text-black">
-          Os Padrinhos
-        </h2>
-        <Carousel images={weddingPartyImages} />
-      </section>
-      <SectionDividerIcon className="w-40 my-20 opacity-70" />
-      <section className="text-white flex flex-col justify-center items-center">
-        <div className="w-full flex flex-col justify-center items-center bg-[#7E8C54] mb-10 py-10">
-          <h2 className="text-4xl text-center mb-10">
-            A gente se ama, o lugar é bonito e as bedidas estarão no ponto. Só
-            falta você dizer que vem para a gente colocar seu nome na lista do
-            maior evento do século!
-          </h2>
-          <Button1
-            onClick={() => navigate("/rsvp")}
-            className="w-80"
-            label={
-              <>
-                <CalendarIcon className="text-[#e2725b] scale-300" />
-                CONFIRME SUA PRESENÇA
-              </>
-            }
-          />
-        </div>
-        <img src="/couple-celebrating.svg" alt="" className="size-60" />
-      </section>
-      <SectionDividerIcon className="w-40 my-20 opacity-70" />
-      <section className=" w-full bg-[#7E8C54] text-white flex flex-col items-center mb-10 py-10">
-        <h2 className="text-4xl text-center mb-10">
-          Faça parte da nossa história e confirme sua presença no maior evento
-          do século!
-        </h2>
-        <Button1
-          onClick={() => navigate("/gifts")}
-          className="w-80"
-          label={
-            <>
-              <GiftIcon className="text-[#e2725b] size-40" />
-              COMPRAR PRESENTE PARA OS NOIVOS
-            </>
-          }
-        />
-      </section>
+      <Footer className="snap-end" />
     </div>
   );
 };
 
 export default Home;
+
+const useActiveSection = (sectionIds) => {
+  const [activeSection, setActiveSection] = useState("");
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { threshold: [0.6] },
+    );
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, [sectionIds]);
+
+  return activeSection;
+};

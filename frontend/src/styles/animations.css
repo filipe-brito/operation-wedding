@@ -1,0 +1,20 @@
+@keyframes rollFilmStrip {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    /* Move exatamente a largura de uma cópia da imagem para a esquerda */
+    transform: translateX(-100%);
+  }
+}
+
+.animate-film-roll {
+  /* Nome | Duração | Timing | Repetição */
+  /* Use 'linear' para velocidade constante, sem paradas suave */
+  animation: rollFilmStrip 6s linear infinite;
+}
+
+/* Container que segura as duas cópias */
+.film-strip-container {
+  display: flex;
+}

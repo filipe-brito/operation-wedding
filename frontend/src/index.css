@@ -74,6 +74,51 @@
     format("truetype");
 }
 
+/* Carregamento da fonte Cinzel */
+@font-face {
+  font-family: "Cinzel";
+  font-style: normal;
+  font-weight: 100 900; /* intervalo de pesos suportados */
+  font-display: swap; /* Importante para performance */
+  src: url("/fonts/Cinzel/Cinzel-VariableFont_wght.ttf") format("truetype");
+}
+
+/* Carregamento da fonte Macondo */
+@font-face {
+  font-family: "Macondo";
+  font-style: normal;
+  font-weight: 400; /* intervalo de pesos suportados */
+  font-display: swap; /* Importante para performance */
+  src: url("/fonts/Macondo/Macondo-Regular.ttf") format("truetype");
+}
+
+/* Carregamento da fonte Macondo */
+@font-face {
+  font-family: "Metamorphous";
+  font-style: normal;
+  font-weight: 400; /* intervalo de pesos suportados */
+  font-display: swap; /* Importante para performance */
+  src: url("/fonts/Metamorphous/Metamorphous-Regular.ttf") format("truetype");
+}
+
+/* Carregamento da fonte Tangerine */
+@font-face {
+  font-family: "Tangerine";
+  font-style: normal;
+  font-weight: 400; /* intervalo de pesos suportados */
+  font-display: swap; /* Importante para performance */
+  src: url("/fonts/Tangerine/Tangerine-Regular.ttf") format("truetype");
+}
+
+/* Carregamento da fonte Tangerine Bold */
+@font-face {
+  font-family: "Tangerine";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/Tangerine/Tangerine-Bold.ttf") format("truetype");
+}
+
 /* ESTENDENDO O TEMA PARA INCLUIR A FONTE JOSEFIN */
 @theme {
   /* Isso cria a classe Tailwind 'font-josefin' */
@@ -109,8 +154,31 @@
 }
 
 @theme {
-  /* Isso cria a classe Tailwind 'font-greatvibes' */
+  /* Isso cria a classe Tailwind 'font-qwitcher' */
   --font-qwitcher: "Qwitcher", system-ui, sans-serif;
+}
+
+@theme {
+  /* Isso cria a classe Tailwind 'font-cinzel' */
+  --font-cinzel: "Cinzel", system-ui, sans-serif;
+}
+
+/* ESTENDENDO O TEMA PARA INCLUIR A FONTE MACONDO */
+@theme {
+  /* Isso cria a classe Tailwind 'font-macondo' */
+  --font-macondo: "Macondo", system-ui, sans-serif;
+}
+
+/* ESTENDENDO O TEMA PARA INCLUIR A FONTE METAMORPHOUS */
+@theme {
+  /* Isso cria a classe Tailwind 'font-Metamorphous' */
+  --font-Metamorphous: "Metamorphous", system-ui, sans-serif;
+}
+
+/* ESTENDENDO O TEMA PARA INCLUIR A FONTE TANGERINE */
+@theme {
+  /* Isso cria a classe Tailwind 'font-Tangerine' */
+  --font-Tangerine: "Tangerine", system-ui, sans-serif;
 }
 
 @layer base {
@@ -125,7 +193,7 @@
     -moz-osx-font-smoothing: grayscale;
 
     /* Força o esquema claro para evitar o "fundo cinza" do sistema mobile */
-    color-scheme: light;
+    color-scheme: dark;
   }
 
   html,

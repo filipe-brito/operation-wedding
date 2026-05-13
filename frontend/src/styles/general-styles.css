@@ -1,0 +1,5 @@
+@layer components {
+  .home-sections-style {
+    @apply snap-start min-h-screen w-full;
+  }
+}
