@@ -2,7 +2,7 @@ import { HeartIcon, MainLogoIcon } from "../atoms/Icons";
 
 export const Footer = () => {
   return (
-    <footer className="flex font-[JosefinSans] text-white text-sm font-normal bottom-0 w-full justify-center items-center bg-[#7E8C54] border-t border-[#C2B289]/30">
+    <footer className="flex font-[JosefinSans] text-white text-sm font-normal w-full justify-center items-center bg-[#7E8C54] border-t border-[#C2B289]/30">
       <div className="flex items-center mx-auto w-full h-[20dvh]">
         <h1>
           <MainLogoIcon className="size-18 text-white ml-4" />

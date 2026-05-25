@@ -16,7 +16,7 @@ const PaymentComponent = ({
   onPaymentSuccess,
   onPaymentFailure,
   captchaToken,
-  setCaptchaToken
+  setCaptchaToken,
 }) => {
   const { setIsLoading } = useLoading();
 
@@ -30,7 +30,6 @@ const PaymentComponent = ({
   const customization = useMemo(
     () => ({
       paymentMethods: {
-        ticket: "all",
         bankTransfer: "all",
         creditCard: "all",
         maxInstallments: 6,

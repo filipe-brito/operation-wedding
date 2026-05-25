@@ -4,12 +4,11 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import HomePage from "../pages/HomePage";
-import MessagesPage from "../pages/MessagesPage";
+import HomePage from "../pages/home/HomePage";
 import GiftsPage from "../pages/GiftsPage";
-import CheckoutPage from "../pages/CheckoutPage";
+import CheckoutPage from "../pages/checkout/CheckoutPage";
 import MainLayout from "../layouts/MainLayout";
-import RSVPPage from "../pages/RSVPPage";
+import RSVPPage from "../pages/rsvp/RSVPPage";
 import TestPage from "../pages/TestPage";
 import ScrollToTop from "../utils/Utils";
 
@@ -29,7 +28,7 @@ const AppRouter = () => {
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/home" element={<HomePage />} />
           {/* Outras rotas desse layout */}
-          <Route path="/messages" element={<MessagesPage />} />
+
           <Route path="/gifts" element={<GiftsPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/rsvp" element={<RSVPPage />} />

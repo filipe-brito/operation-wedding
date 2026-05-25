@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
-import { RingsIcon } from "../atoms/Icons";
-import { CountdownTimer } from "../molecules/CountdownTimer";
+import { RingsIcon } from "../../../components/atoms/Icons";
+import { CountdownTimer } from "../../../components/molecules/CountdownTimer";
 import { motion } from "framer-motion";
 export const HomeHeroSection = () => {
   const imgRef = useRef();

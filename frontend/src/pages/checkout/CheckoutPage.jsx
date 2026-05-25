@@ -1,9 +1,9 @@
-import { useCart } from "../context/CartContext";
+import { useCart } from "../../context/CartContext";
 import { useState } from "react";
-import { ProcessPayment } from "../components/organisms/ProcessPayment";
-import { PaymentConclusion } from "../components/organisms/PaymentConclusion";
-import { FailureIcon } from "../components/atoms/Icons";
-import { GiftReview } from "../components/organisms/GiftReview";
+import { ProcessPayment } from "./components/ProcessPayment";
+import { PaymentConclusion } from "../../components/organisms/PaymentConclusion";
+import { FailureIcon } from "../../components/atoms/Icons";
+import { GiftReview } from "./components/GiftReview";
 import { Turnstile } from "@marsidev/react-turnstile";
 
 const CheckoutPage = () => {
@@ -12,7 +12,7 @@ const CheckoutPage = () => {
   if (cart.length === 0) {
     return (
       <div className="flex my-10">
-        <h2 className="font-marcellus text-2xl text-[#5a461a]">
+        <h2 className="font-marcellus text-2xl text-grafite">
           Seu carrinho está vazio. Escolha um presente primeiro! 😉
         </h2>
       </div>
@@ -21,13 +21,11 @@ const CheckoutPage = () => {
 
   const handlePaymentSuccess = (paymentData) => {
     setPaymentReturn(paymentData);
-    console.log("Teste: ", paymentData);
     setPaymentStatus("success");
   };
 
   const handlePaymentFailure = (paymentData) => {
     setPaymentReturn(paymentData);
-    console.log("Teste de erro: ", paymentData);
     setPaymentStatus("failure");
   };
 
@@ -36,9 +34,9 @@ const CheckoutPage = () => {
   const [captchaToken, setCaptchaToken] = useState(null);
 
   const activeStyle =
-    "whitespace-nowrap flex items-center justify-center w-54 p-2 text-stone-100 bg-[#575b43] border-none";
+    "whitespace-nowrap flex items-center justify-center w-54 p-2 text-stone-100 bg-olive border-none";
   const inactiveStyle =
-    "whitespace-nowrap flex items-center justify-center w-54 p-2 text-[#5a461a] bg-transparent border border-[#575b43]";
+    "hidden md:flex whitespace-nowrap items-center justify-center w-54 p-2 text-grafite bg-transparent border border-olive";
 
   let paymentProcessPainel;
 
@@ -49,7 +47,7 @@ const CheckoutPage = () => {
 
     case "captcha":
       paymentProcessPainel = (
-        <div className="flex flex-col items-center bg-white p-10 rounded-2xl shadow-sm text-center">
+        <div className="md:w-1/3 flex flex-col items-center bg-white p-10 rounded-2xl shadow-sm text-center m-10">
           <div className="flex justify-center my-4">
             <Turnstile
               siteKey={import.meta.env.VITE_CLOUDFLARE_TURNSTILE_SITE_KEY}
@@ -100,7 +98,7 @@ const CheckoutPage = () => {
           </p>
           <button
             onClick={() => setPaymentStatus("captcha")}
-            className="px-8 py-2 bg-[#575b43] text-white rounded-lg hover:bg-[#454936] transition-colors cursor-pointer"
+            className="px-8 py-2 bg-olive text-white rounded-lg hover:bg-[#454936] transition-colors cursor-pointer"
           >
             Tentar novamente com outro meio de pagamento
           </button>
@@ -110,8 +108,11 @@ const CheckoutPage = () => {
   }
 
   return (
-    <div className="p-4">
-      <div className="flex w-full gap-4 items-center justify-center text-[#5a461a] mb-8">
+    <div className="w-full mt-20 flex flex-col">
+      <h1 className="font-marcellus text-3xl text-grafite text-center">
+        Compra de presentes
+      </h1>
+      <div className="flex gap-4 items-center justify-center text-grafite mt-6">
         <div
           className={`${
             paymentStatus === "review" ? activeStyle : inactiveStyle
@@ -134,8 +135,9 @@ const CheckoutPage = () => {
           3. Resumo do pagamento
         </div>
       </div>
-
-      <div>{paymentProcessPainel}</div>
+      <div className="flex justify-center items-center my-10">
+        {paymentProcessPainel}
+      </div>
     </div>
   );
 };

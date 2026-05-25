@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { useCart } from "../../context/CartContext";
+import { useCart } from "../../../context/CartContext";
 import PaymentComponent from "./PaymentForm";
-import { LoadingIcon } from "../atoms/Icons";
+import { LoadingIcon } from "../../../components/atoms/Icons";
 
 export const ProcessPayment = ({
   handlePaymentSuccess,
   handlePaymentFailure,
   captchaToken,
-  setCaptchaToken
+  setCaptchaToken,
 }) => {
   const { cart, totalValue, donorName, message } = useCart();
 

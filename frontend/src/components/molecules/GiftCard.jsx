@@ -25,31 +25,31 @@ export const GiftCard = ({ id, image, name, price }) => {
   };
 
   return (
-    <div className="mx-auto w-8/10 flex flex-col group py-4 bg-white rounded-xl shadow-2xl hover:shadow-md transition-shadow duration-300 overflow-hidden border border-stone-100">
-      <div className="relative h-36 overflow-hidden">
+    <div className="w-[300px] flex flex-col group pb-4 bg-white rounded-xl shadow-2xl hover:shadow-md transition-shadow duration-300">
+      <div className="relative overflow-hidden rounded-t-xl">
         <img
           src={image}
           alt={name}
-          className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+          // Sempre fornecer imagens 300x300
+          className="w-[300px] h-[300px] mt-[60px] object-cover brightness-75 opacity-90 transition-transform duration-500 group-hover:scale-105"
         />
+        <div className="absolute top-0 left-0 w-full min:h-[60px] bg-olive p-4">
+          <h2 className="w-full flex text-center font-bold font-[Cinzel] text-white text-2xl">
+            {name}
+          </h2>
+        </div>
       </div>
 
       {/* 2. Informações do Presente */}
       <div className="px-5 text-center">
-        <h2 className="w-full h-20 flex justify-center items-center font-marcellus text-[#5a461a] text-xl mb-2">
-          {name}
-        </h2>
-
-        <p className="font-josefin text-stone-500 text-lg font-light mb-4">
+        <p className="font-[Cinzel] font-bold text-grafite text-4xl py-4">
           {formatPrice(price)}
         </p>
 
         {/* 3. Botão de Ação (Átomo de Botão) */}
         <button
           onClick={handleAdd}
-          className="w-full py-2 bg-[#575b43] text-white font-josefin rounded-lg 
-                     hover:bg-[#4a3a15] transition-colors duration-200 
-                     text-sm uppercase tracking-widest font-medium cursor-pointer"
+          className="w-full p-2 bg-olive text-white font-josefin rounded-lg hover:bg-[#4a3a15] transition-colors duration-200 text-base uppercase tracking-widest cursor-pointer"
         >
           Adicionar ao Carrinho
         </button>

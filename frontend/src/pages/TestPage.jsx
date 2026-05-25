@@ -1,35 +1,11 @@
 import { Button1 } from "../components/atoms/Button1";
 import LoadingModal from "../components/atoms/LoadingModal";
-import { Carousel2 } from "../components/organisms/Carousel";
-import { Header2 } from "../components/organisms/Header";
+import { ProcessPayment } from "./checkout/components/ProcessPayment";
 
 const TestPage = () => {
-  const coupleImages = [
-    {
-      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1774961576/image_1_qekqwa.jpg",
-    },
-    {
-      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1774961576/image_2_w1dpde.jpg",
-    },
-    {
-      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1774961576/image_3_afyz98.jpg",
-    },
-    {
-      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1774961577/image_4_p9prlk.jpg",
-    },
-    {
-      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1774961576/image_5_tlezdf.jpg",
-    },
-    {
-      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1774961576/image_6_i0texv.jpg",
-    },
-    {
-      url: "https://res.cloudinary.com/dnqhyvodt/image/upload/v1774961576/image-7_brjwdo.jpg",
-    },
-  ];
   return (
     <>
-      <div className="text-2xl font-bold mb-6 gap-4">
+      <div className="text-2xl mb-6 gap-4">
         <h1 className="text-4xl mb-4">CATÁLOGO DE FONTES</h1>
         <div className="font-[JosefinSans]">
           <h2>JosefinSans</h2>
@@ -75,7 +51,13 @@ const TestPage = () => {
           <h2>Tangerine</h2>
           <p>Texto digitado em Tangerine</p>
         </div>
-        <section className="w-[100dvw] h-[90dvh] md:h-[85dvh] flex flex-col items-center justify-center"></section>
+        <div className="font-[CrimsonText]">
+          <h2>CrimsonText</h2>
+          <p>Texto digitado em CrimsonText</p>
+        </div>
+        <section className="w-[100dvw] h-[90dvh] md:h-[85dvh] flex flex-col items-center justify-center">
+          <ProcessPayment />
+        </section>
       </div>
     </>
   );

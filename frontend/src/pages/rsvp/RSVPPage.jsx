@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLoading } from "@/context/LoadingContext";
-import { RSVPForm } from "../components/organisms/RSVPForm";
+import { RSVPForm } from "./components/RSVPForm";
 
 const RSVPPage = () => {
   const { setIsLoading } = useLoading();

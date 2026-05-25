@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export const MenuButton = ({ switcher, setSwitcher, isOnTop }) => {
-  const spanIdleStyle = "h-[0.125rem] w-full rounded-full shadow-sm bg-white";
+  const spanIdleStyle = "h-[0.125rem] w-full rounded-full shadow-sm";
 
   return (
     <div
@@ -12,13 +12,13 @@ export const MenuButton = ({ switcher, setSwitcher, isOnTop }) => {
         onClick={() => setSwitcher(!switcher)}
       >
         <span
-          className={`${spanIdleStyle} ${switcher ? "transition duration-400 translate-y-[11px] rotate-[-45deg]" : "transition-all duration-400 translate-y-[0px] rotate-[0deg]"}`}
+          className={`${spanIdleStyle} ${switcher ? "transition duration-400 bg-[#C66E4E] translate-y-[11px] rotate-[-45deg]" : "transition-all duration-400 bg-white translate-y-[0px] rotate-[0deg]"}`}
         ></span>
         <span
-          className={`${spanIdleStyle} ${switcher ? "transition duration-400 translate-x-[-10px] opacity-0" : "transition-all duration-400 translate-x-[0px] opacity-100 "}`}
+          className={`${spanIdleStyle} ${switcher ? "transition duration-400 bg-[#C66E4E] translate-x-[-10px] opacity-0" : "transition-all duration-400 bg-white translate-x-[0px] opacity-100 "}`}
         ></span>
         <span
-          className={`${spanIdleStyle} ${switcher ? "transition duration-400 translate-y-[-11px] rotate-[45deg]" : "transition-all duration-400 translate-y-[0px] rotate-[0deg]"}`}
+          className={`${spanIdleStyle} ${switcher ? "transition duration-400 bg-[#C66E4E] translate-y-[-11px] rotate-[45deg]" : "transition-all duration-400 bg-white translate-y-[0px] rotate-[0deg]"}`}
         ></span>
       </button>
     </div>

@@ -1,6 +1,6 @@
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { useEffect, useState } from "react";
-import { AddIcon, DeleteIcon } from "../atoms/Icons";
+import { AddIcon, DeleteIcon } from "../../../components/atoms/Icons";
 import { ConfirmAttendance } from "@/service/UtilsService";
 import { IMaskInput } from "react-imask";
 import { Turnstile } from "@marsidev/react-turnstile";

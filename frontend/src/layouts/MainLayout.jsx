@@ -6,7 +6,6 @@ import CartDrawer from "../components/organisms/CartDrawer";
 import { useLocation } from "react-router-dom";
 import LoadingModal from "../components/atoms/LoadingModal";
 import { Footer } from "../components/organisms/Footer";
-import { Header2 } from "../components/organisms/Header";
 
 const MainLayout = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -15,10 +14,9 @@ const MainLayout = () => {
   const isCheckoutPage = location.pathname === "/checkout";
 
   return (
-    <div className="font-[JosefinSans] text-xs md:w-full bg-[#ede9e6]">
+    <div className="font-[JosefinSans] text-xs w-full min-h-screen bg-offwhite">
       <LoadingModal />
-      {/*<Header />{" "}*/}
-      <Header2 />
+      <Header />
       {/* Mesmo sendo interno da div principal, ele não ocupa espaço nela, ele ocupa espaço na root.*/}
       <main className="flex justify-center">
         <Outlet />
@@ -32,6 +30,7 @@ const MainLayout = () => {
           </>
         )}
       </main>
+      <Footer />
     </div>
   );
 };
