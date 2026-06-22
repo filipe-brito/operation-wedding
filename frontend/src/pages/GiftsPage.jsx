@@ -83,7 +83,7 @@ const GiftsPage = () => {
           className="size-50"
         />
       </div>
-      <div className="w-8/10 relative grid md:grid-cols-4 grid-cols-1 gap-4 justify-items-center">
+      <div className="w-8/10 relative grid md:grid-cols-3 grid-cols-1 gap-4 justify-items-center">
         {catalog.map((gift) => (
           <GiftCard
             key={gift.id}

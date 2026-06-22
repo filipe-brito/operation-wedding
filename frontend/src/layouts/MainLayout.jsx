@@ -14,11 +14,11 @@ const MainLayout = () => {
   const isCheckoutPage = location.pathname === "/checkout";
 
   return (
-    <div className="font-[JosefinSans] text-xs w-full min-h-screen bg-offwhite">
+    <div className="font-[Gabriola] text-xl w-full min-h-screen bg-ivory">
       <LoadingModal />
       <Header />
       {/* Mesmo sendo interno da div principal, ele não ocupa espaço nela, ele ocupa espaço na root.*/}
-      <main className="flex justify-center">
+      <main className="flex justify-center md:w-[1200px] md:mx-auto">
         <Outlet />
         {!isCheckoutPage && (
           <>

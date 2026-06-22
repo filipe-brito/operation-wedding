@@ -1,20 +1,36 @@
 import { useCart } from "../../context/CartContext";
 import { useState } from "react";
 import { ProcessPayment } from "./components/ProcessPayment";
-import { PaymentConclusion } from "../../components/organisms/PaymentConclusion";
-import { FailureIcon } from "../../components/atoms/Icons";
+import { PaymentConclusion } from "./components/PaymentConclusion";
+import { FailureIcon } from "@/components/atoms/Icons";
 import { GiftReview } from "./components/GiftReview";
 import { Turnstile } from "@marsidev/react-turnstile";
+import { useNavigate } from "react-router-dom";
+import { Button1 } from "@/components/atoms/Button1";
+import { GiftIcon } from "@/components/atoms/Icons";
 
 const CheckoutPage = () => {
+  const navigate = useNavigate();
+
   const { cart } = useCart();
 
   if (cart.length === 0) {
     return (
-      <div className="flex my-10">
-        <h2 className="font-marcellus text-2xl text-grafite">
+      <div className="flex flex-col items-center justify-center h-[75vh] m-10 space-y-12">
+        <h2 className="font-marcellus text-2xl text-grafite text-center">
           Seu carrinho está vazio. Escolha um presente primeiro! 😉
         </h2>
+
+        <Button1
+          onClick={() => navigate("/gifts")}
+          className="w-80"
+          label={
+            <>
+              <GiftIcon className="text-[#e2725b] size-30" />
+              COMPRAR PRESENTE PARA OS NOIVOS
+            </>
+          }
+        />
       </div>
     );
   }
@@ -52,7 +68,6 @@ const CheckoutPage = () => {
             <Turnstile
               siteKey={import.meta.env.VITE_CLOUDFLARE_TURNSTILE_SITE_KEY}
               onSuccess={(token) => {
-                console.log("A Cloudflare confirmou humanidade:", token);
                 setCaptchaToken(token);
                 setPaymentStatus("process");
               }}

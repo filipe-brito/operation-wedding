@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "tailwind-animations";
 
 /* Carregamento da fonte JosefinSans */
 @font-face {
@@ -137,6 +136,24 @@
   src: url("/fonts/Crimson_Text/CrimsonText-Regular.ttf") format("truetype");
 }
 
+/* Carregamento da fonte Gabriola */
+@font-face {
+  font-family: "Gabriola";
+  font-style: normal;
+  font-weight: 400; /* intervalo de pesos suportados */
+  font-display: swap; /* Importante para performance */
+  src: url("/fonts/Gabriola/Gabriola.ttf") format("truetype");
+}
+
+/* Carregamento da fonte Fiona */
+@font-face {
+  font-family: "Fiona";
+  font-style: normal;
+  font-weight: 400; /* intervalo de pesos suportados */
+  font-display: swap; /* Importante para performance */
+  src: url("/fonts/Fiona/Fiona-Regular.ttf") format("truetype");
+}
+
 /* ESTENDENDO O TEMA PARA INCLUIR A FONTE JOSEFIN */
 @theme {
   /* Isso cria a classe Tailwind 'font-josefin' */
@@ -161,6 +178,10 @@
   --font-tangerine: "Tangerine", system-ui, sans-serif;
   /* Isso cria a classe Tailwind 'font-Crimson' */
   --font-crimsontext: "CrimsonText", system-ui, sans-serif;
+  /* Isso cria a classe Tailwind 'font-Gabriola' */
+  --font-gabriola: "Gabriola", system-ui, sans-serif;
+  /* Isso cria a classe Tailwind 'font-Fiona' */
+  --font-fiona: "Fiona", system-ui, sans-serif;
 }
 
 @theme {
@@ -168,6 +189,8 @@
   --color-offwhite: #ede9e6;
   --color-terracota: #c66e4e;
   --color-olive: #7e8c54;
+  --color-deepolive: #52592f;
+  --color-ivory: #fdfef0;
 }
 
 @layer base {

@@ -4,12 +4,12 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.operationwedding.backend.model.dto.GuestDTO;
+import com.operationwedding.backend.model.dto.RsvpDto;
 import com.operationwedding.backend.model.entities.Guest;
 import com.operationwedding.backend.model.enums.GuestStatus;
 
 public class GuestMapper {
-	public static List<Guest> companionsToEntity(String mainGuestName, GuestDTO dto) {
+	public static List<Guest> companionsToEntity(String mainGuestName, RsvpDto dto) {
 
 		List<Guest> guestCompanions = new ArrayList<>();
 
@@ -21,10 +21,9 @@ public class GuestMapper {
 			Guest guest = new Guest();
 			guest.setFullName(companion.getFullName());
 			guest.setStatus(GuestStatus.CONFIRMED);
-			guest.setIsCompanion(true);
-			guest.setIsUnderage(companion.getIsUnderage());
+			guest.setGuestType("COMPANION");
+			guest.setDob(companion.getDob());
 			guest.setConfirmedAt(OffsetDateTime.now());
-			guest.setGuestGroup("Família " + mainGuestName);
 
 			guestCompanions.add(guest);
 		});

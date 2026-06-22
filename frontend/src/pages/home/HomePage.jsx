@@ -14,7 +14,6 @@ import { useNavigate } from "react-router-dom";
 import "@/styles/general-styles.css";
 import { Footer } from "../../components/organisms/Footer";
 import { ImageFrame, ImageFrame3 } from "../../components/atoms/ImageFrame";
-import { HomeNavigation } from "./components/HomeNavigation";
 import { HomeCoupleSection } from "./sections/HomeCoupleSection";
 import { HomeRSVPSection } from "./sections/HomeRSVPSection";
 import { HomeGiftsSection } from "./sections/HomeGiftsSection";
@@ -49,24 +48,35 @@ const Home = () => {
   const activeSection = useActiveSection(["hero", "about", "rsvp", "gifts"]);
 
   return (
-    <div className="w-full flex flex-col items-center overflow-hidden">
-      <HomeNavigation activeSection={activeSection} isVisible={isVisible} />
-
+    <div className="w-full flex flex-col items-center overflow-hidden text-grafite bg-[url('/flowers-bg.webp')]">
       <HomeHeroSection />
 
       <HomeAboutSection />
-
-      <DividerIcon2 className="w-full text-[#3A3A3A] my-10" />
-
       <HomeCoupleSection />
-
-      <DividerIcon2 className="w-full text-[#3A3A3A] my-10" />
-
       <HomeRSVPSection />
-
-      <DividerIcon2 className="w-full text-[#3A3A3A] my-10" />
-
       <HomeGiftsSection />
+
+      <div className="w-full md:w-8/10 px-12 flex flex-col my-8 leading-4">
+        <h1 className="text-3xl text-center my-8">Agradecimentos</h1>
+
+        <p className="md:px-10">
+          Obrigado por fazer parte da nossa história! Sua presença, carinho e
+          generosidade tornam este momento ainda mais especial. Somos muito
+          gratos por compartilhar esse dia e o início dessa nova etapa ao seu
+          lado.
+        </p>
+
+        <p className="text-left text-2xl font-[Tangerine] my-8">
+          Amanda e Filipe
+        </p>
+        <div className="w-full flex justify-end">
+          <img
+            src="/god-signature-logo.webp"
+            alt="Assinatura de Deus"
+            className="w-40 -rotate-10"
+          />
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,0 +1,10 @@
+full_name;phone;guest_type;is_underage;guest_group
+Michael Jackson;11999999999;GUEST;false;G001
+Prince;11988888888;GUEST;false;G002
+Gerald de Rivia;11977777777;GUEST;false;G003
+Paul;11966666666;GUEST;false;G004
+John;;COMPANION;false;G004
+George;;COMPANION;false;G004
+Ringo;;COMPANION;false;G004
+Brad Pitt;11955555555;GUEST;false;G005
+Angelina Jolie;11944444444;GUEST;false;G005

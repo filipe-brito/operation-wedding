@@ -1,4 +1,8 @@
-import { CodeBarIcon, SuccessIcon, ProcessingIcon } from "../atoms/Icons";
+import {
+  CodeBarIcon,
+  SuccessIcon,
+  ProcessingIcon,
+} from "@/components/atoms/Icons";
 
 export const PaymentConclusion = ({ paymentData }) => {
   switch (paymentData.payment_method_type) {

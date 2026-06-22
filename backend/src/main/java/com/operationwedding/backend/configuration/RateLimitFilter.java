@@ -25,8 +25,6 @@ public class RateLimitFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         
         String ip = request.getRemoteAddr();
-        
-        System.out.println("IP de origem da requisição: " + ip);
 
         Bucket bucket = rateLimiterService.resolveBucket(ip);
 

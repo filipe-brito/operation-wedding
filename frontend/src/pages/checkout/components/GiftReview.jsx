@@ -30,7 +30,7 @@ export const GiftReview = ({ setPaymentStatus }) => {
     console.log("Dados da mensagem: ", cart);
   };
   return (
-    <div className="md:w-1/2 flex flex-col bg-white text-base shadow-sm rounded-xl m-2 md:mx-auto">
+    <div className="md:w-8/10 flex flex-col bg-white text-base shadow-sm rounded-xl m-2 md:mx-auto">
       <div className="flex flex-col p-2 md:grid md:grid-cols-2 gap-4">
         <form
           id="form"

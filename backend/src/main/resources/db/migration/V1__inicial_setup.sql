@@ -43,15 +43,75 @@ create schema if not exists guests;
 create table guests.guest_list (
 	id serial primary key,
 	full_name varchar(255) not null,
-	phone varchar(11),
-	email varchar(255),
+	phone varchar(11) unique,
 	status varchar(20) not null default 'PENDING',
 		check (status in ('PENDING', 'CONFIRMED', 'WILL_NOT_ATTEND')),
-	is_companion boolean not null default false,
-	is_underage boolean not null default false,
-	guest_group varchar(100),
-	updated_at timestamp with time zone default null
+	guest_type varchar(20) not null,
+		check (guest_type in ('GUEST', 'COMPANION')),
+	date_of_birth date,
+	guest_group varchar(10),
+	invite_code varchar(20) unique,
+	updated_at timestamp with time zone default now()
 );
 
-CREATE INDEX idx_guest_group ON guests.guest_list(guest_group);
-CREATE INDEX idx_guest_status ON guests.guest_list(status);
+-- We must use Index to optimize the data searches. This way aviods the "sequencial reading"
+create index idx_guest_group ON guests.guest_list(guest_group);
+create index idx_guest_status ON guests.guest_list(status);
+
+-- Function to generate invite code
+create function guests.generate_invite_code()
+returns varchar as $$
+declare
+    word text[] := array['LOVE', 'FOFO', 'FOFURA', 'MEL', 'ETERNO', 'CASA', 'GIFT', 'LINDO', 'AMOR', 'JANTAR', 'DANCA', 'ROCK', 'FOREVER', 'FESTA', 'PARTY', 'VERDADE', 'FRIEND', 'VINHO', 'APPLE', 'MUSICA', 'GAME', 'KISS', 'BEIJOS', 'CARINHO', 'QUITUTES', 'FAMILIA', 'FELICIDADE', 'SHOW', 'BENCAO', 'DEUS', 'CUIDADO', 'PAIXAO', 'ELEGANTE', 'BANQUETE', 'FILMES', 'SERIES', 'VIAGEM', 'LANCHE'];
+    code text;
+    already_exist boolean;
+begin
+    loop
+        -- Random an word and concatenate to 3 random numbers
+        code := word[floor(random() * array_length(word, 1) + 1)] || floor(random() * (999 - 100 + 1) + 100)::text;
+        
+        -- Ensures that generated code not exist in table
+        select exists(select 1 from guests.guest_list where invite_code = code) INTO already_exist;
+        
+        -- If not exist, get out of the loop. If exist, it tries to generate another code.
+        exit when not already_exist;
+    end loop;
+    
+    return code;
+end;
+$$ language plpgsql;
+
+-- Function to validate guest type and calls the trigger to generate invite code
+create function guests.validation_invite_code_trigger()
+returns trigger as $$
+begin
+	if new.guest_type = 'GUEST' then
+		new.invite_code := guests.generate_invite_code();
+	else
+		new.invite_code := null;
+	end if;
+	return new;
+end;
+$$ language plpgsql;
+
+-- Trigger to generate rsvp code
+create trigger trg_generate_invite_code before insert on guests.guest_list for each row execute function guests.validation_invite_code_trigger();
+
+-- Function to validate guest type and calls the trigger to delete guests from the same group
+create function guests.validation_delete_on_cascade_group_trigger()
+returns trigger as $$
+begin
+	-- Avoids infinite loop
+	if pg_trigger_depth() > 1 then
+		return old;
+	end if;
+
+	if old.guest_type = 'GUEST' then
+		delete from guests.guest_list where guest_group = old.guest_group;
+	end if;
+	return old;
+end;
+$$ language plpgsql;
+
+-- Trigger to delete guests from the same group
+create trigger trg_delete_on_cascade_group after delete on guests.guest_list for each row execute function guests.validation_delete_on_cascade_group_trigger();

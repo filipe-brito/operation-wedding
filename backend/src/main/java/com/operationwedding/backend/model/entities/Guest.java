@@ -1,5 +1,6 @@
 package com.operationwedding.backend.model.entities;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 import com.operationwedding.backend.model.enums.GuestStatus;
@@ -23,15 +24,16 @@ public class Guest {
 	private String fullName;
 	@Column(length=11)
 	private String phone;
-	private String email;
 	@Enumerated(EnumType.STRING)
 	private GuestStatus status;
-	@Column(name="is_companion", nullable=false)
-	private Boolean isCompanion = false;
-	@Column(name="is_underage", nullable=false)
-	private Boolean isUnderage = false;	
+	@Column(name="guest_type", nullable=false)
+	private String guestType;
+	@Column(name="date_of_birth", nullable=false)
+	private LocalDate dob; 
 	@Column(name="guest_group")
 	private String guestGroup;
+	@Column(name="invite_code")
+	private String inviteCode;
 	@Column(name="updated_at", nullable=false)
 	private OffsetDateTime confirmedAt;
 	
@@ -53,35 +55,36 @@ public class Guest {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
 	public GuestStatus getStatus() {
 		return status;
 	}
 	public void setStatus(GuestStatus status) {
 		this.status = status;
 	}
-	public Boolean getIsCompanion() {
-		return isCompanion;
+	public String getGuestType() {
+		return guestType;
 	}
-	public void setIsCompanion(Boolean isCompanion) {
-		this.isCompanion = isCompanion;
+	public void setGuestType(String guestType) {
+		this.guestType = guestType;
 	}
-	public Boolean getIsUnderage() {
-		return isUnderage;
+
+	public LocalDate getDob() {
+		return dob;
 	}
-	public void setIsUnderage(Boolean isUnderage) {
-		this.isUnderage = isUnderage;
+	public void setDob(LocalDate dob) {
+		this.dob = dob;
 	}
 	public String getGuestGroup() {
 		return guestGroup;
 	}
 	public void setGuestGroup(String guestGroup) {
 		this.guestGroup = guestGroup;
+	}
+	public String getInviteCode() {
+		return inviteCode;
+	}
+	public void setInviteCode(String inviteCode) {
+		this.inviteCode = inviteCode;
 	}
 	public OffsetDateTime getConfirmedAt() {
 		return confirmedAt;

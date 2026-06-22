@@ -20,6 +20,10 @@ public class MdcInterceptor implements HandlerInterceptor{
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String traceId = UUID.randomUUID().toString().substring(0, 8);
         MDC.put("trace_id", traceId); 
+
+        // 2. Captura o IP do cliente e joga no MDC
+        String clientIp = request.getRemoteAddr();
+        MDC.put("client_ip", clientIp);
         return true;
     }
 

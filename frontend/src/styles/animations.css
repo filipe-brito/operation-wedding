@@ -1,20 +1,27 @@
-@keyframes rollFilmStrip {
-  from {
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes slideInfromLeft {
+  0% {
+    transform: translateX(-50%);
+    opacity: 0;
+  }
+  100% {
     transform: translateX(0);
-  }
-  to {
-    /* Move exatamente a largura de uma cópia da imagem para a esquerda */
-    transform: translateX(-100%);
+    opacity: 1;
   }
 }
 
-.animate-film-roll {
-  /* Nome | Duração | Timing | Repetição */
-  /* Use 'linear' para velocidade constante, sem paradas suave */
-  animation: rollFilmStrip 6s linear infinite;
-}
-
-/* Container que segura as duas cópias */
-.film-strip-container {
-  display: flex;
+.animate-slide-in-from-left {
+  animation: slideInfromLeft 0.5s ease-in-out;
 }

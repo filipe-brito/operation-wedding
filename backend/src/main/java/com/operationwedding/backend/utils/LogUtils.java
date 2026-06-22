@@ -26,6 +26,9 @@ public class LogUtils {
 
         // 2. Mask CPFs/Numbers (Ex: ***.456.789-**)
         text = text.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "***.$2.$3-**");
+
+        // 3. Mask phone numbers whit 11 digits (Ex: *******1234)
+        text = text.replaceAll("(\\d{7})(\\d{4})", "*******$2");
         return text;
     }
 

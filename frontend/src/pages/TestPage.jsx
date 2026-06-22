@@ -55,6 +55,10 @@ const TestPage = () => {
           <h2>CrimsonText</h2>
           <p>Texto digitado em CrimsonText</p>
         </div>
+        <div className="font-[Gabriela]">
+          <h2>Gabriela</h2>
+          <p>Texto digitado em Gabriela</p>
+        </div>
         <section className="w-[100dvw] h-[90dvh] md:h-[85dvh] flex flex-col items-center justify-center">
           <ProcessPayment />
         </section>
